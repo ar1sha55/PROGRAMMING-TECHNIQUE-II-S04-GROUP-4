@@ -1,0 +1,15 @@
+Medication Scheduler STEP BY STEP USE
+
+1) Open app
+) Register you and your private doctor account
+) Click on "ADD MEDICATION" button, this will bring you to the next page
+) Medication name will be requested. Type the name of your medication, more precise the better. Click "NEXT"
+) A page to choose the type of your medication will pop up. It is a multiple choice. 
+  -CAPSULE, TABLET, LIQUID, CREAM, DROPS, INJECTION, LOTION, GEL, OINTMENT, SPRAY, PATCH
+  Choose the one most identical to your medication. Click "NEXT"
+) You will be brought to a page to insert your medication strength. Insert it as well as the unit (mg, mcg, g, ml, %). Click 'NEXT'
+) You will be asked the frequency of the use of medication. You also can add the time. Once this is done, you can ensure you
+  will be notified to take your medication. Click "NEXT"
+) You can opt to insert any additional details or just skip this. Click "DONE"
+) A calendar will pop up, showing when you must take the medication.
+  
