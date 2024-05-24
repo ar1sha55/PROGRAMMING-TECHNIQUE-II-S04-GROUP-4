@@ -5,62 +5,77 @@
 #define MAX 50
 using namespace std;
 
-//parent class 1 (for everything about meds)
-/*class Medication {
-    private:
-    string name, form, dosage;
+class Calendar
+{
+    string startDate;
+    string endDate;
 
     public:
-    Medication(string _name= " ", string _form= " ", string _dosage=" "): name(_name), form(_form), dosage(_dosage) {} //default constructor
+        Calendar();
+        Calendar(string startDate = "", string endDate = ""){
+            this->startDate = startDate;
+            this->endDate = endDate;
+        }
+        //Medicine medicine[50];
+        ~Calendar();
 
-    void setmedname(string medname) {
-        name = medname;
-    }
+        void setstartDate(const string& startDate){ this->startDate = startDate;}
+        void setendDate(const string& endDate){ this->endDate = endDate;}
 
-    string getmedname() {return name;}
-    void setform(string medform) {form = medform;}
-    string getform() {return medform;}
-    void setdosage(string meddos) {dosage = meddos;}
-    string getdosage() {return dosage;}
+        string getstartDate () const { return startDate; }  // y must put const?
+        string getendDate () const { return endDate; }
+
 };
 
-//child 1.2 (untuk generate report)
-class Calendar {
-    private:
-    int frequency;
-    string starttDate, endDate;
+
+class Frequency
+{
+    protected:
+        int freqVal;
 
     public:
-    Calendar(int freq=0, string _startDate=" ", string _endDate=" "): frequency(freq), startDate(_startDate), endDate(_endDate) {}
-    void setfreq(int freq) {frequency = freq;}
-    int getfreq() {return frequency;}
-    void setstartDate(string start) {startDate = start;}
-    string getstartDate() {return startDate;}
-    void setendDate(string end) {endDate = end;}
-    string getendDate() {return endDate;}
+        Frequency() : freqVal(0){}
+        Frequency(int freqVal):freqVal(freqVal){}
 
-    ~Calendar() {} //destructor
+        ~Frequency();
+
 };
 
-class Reminder {
-    string message;
+
+class dailyFreq : public Frequency
+{
+    int time;
+    int dailyIntake;
 
     public:
-    Reminder(string m=" "): message(m) {}
-    void setReminder(string m) {
-        message = m;
-    }
-    string getReminder() {
-        return message;
-    }
+        dailyFreq(): time(0), dailyIntake(0){}
+        dailyFreq(int t, int d): time(t), dailyIntake(d){}
 
-    ~Reminder() {} //destructor
+        ~dailyFreq();
+
+        void setTime(int time){ this->time = time; }
+        void setdailyIntake(int dailyIntake){ this->dailyIntake = dailyIntake; }
+        int getTime() const{ return time; }
+        int getdailyIntake() const { return dailyIntake; }
+
+
 };
 
-class Time {
-    private:
 
-}*/
+class weeklyFreq : public Frequency
+{
+    int dayPerWeek;
+
+    public:
+        weeklyFreq(): dayPerWeek(0){}
+        weeklyFreq(int dpw): dayPerWeek(dpw){}
+
+        ~weeklyFreq();
+
+        void setdayPerWeek(int dayPerWeek){ this->dayPerWeek = dayPerWeek; }
+        int getdayPerWeek() const{ return dayPerWeek; }
+
+};
 
 //parent 2
 class Patient {
@@ -86,11 +101,16 @@ class Patient {
 
     string getname() {return fullname;}
     string getdob() {return dob;}
-    string getsex() {return sex;}
+    string getsex() {
+        if(sex=="F")
+        sex = "Female";
+        else
+        sex = "Male";
+        return sex;}
 
     void getData() { //for first time
         cout << "\t\t<< ENTER DETAILS >>" << endl
-             << "\t\t<< TO REGISTER >>" << endl;
+             << "\t\t<< TO REGISTER >>" << endl << endl;
         cout << "\t\tPatient ID: ";
         getline(cin, patientID);
         cout << "\t\tFull Name: ";
@@ -105,24 +125,40 @@ class Patient {
 
     void authenticate() {//untuk confirm
         system("cls");
+        string pt, pw;
         cout << "\n\t\t<<PLEASE ENTER AGAIN>>" << endl;
         cout << "\t\t<<FOR CONFIRMATION>>" << endl << endl;
         cout << "\t\tPatient ID: ";
-        getline(cin, patientID);
+        getline(cin, pt);
+        setID(pt);
         cout << "\t\tPassword: ";
-        getline(cin, password);
+        getline(cin, pw);
+        setpassword(pw);
         system("cls");
-        if(patientID!=getID())
-        cout << "\t\t!User ID entered is wrong." << endl
-             << "\t\tEnter again!" << endl;
-        else
-        cout << "\t\t!Password entered is wrong." << endl
-             << "\t\tEnter again!" << endl;
-        while(patientID != getID() || password != getpassword()){
+        if(pt != patientID && pw != password)
+        do{
+            cout << "\t\t!Both ID and password entered is wrong." << endl
+            << "\t\tEnter again!" << endl;
             cout << "\t\tUser ID: ";
             getline(cin, patientID);
             cout << "\t\tPassword: ";
             getline(cin, password);
+        }while(pt == patientID && pw == password);
+        else if(pw!=password) {
+             do{
+            cout << "\t\t!Password entered is wrong." << endl
+            << "\t\tEnter again!" << endl;
+            cout << "\t\tPassword: ";
+            getline(cin, password);
+            }while(pw==password);
+        }
+        else if(pt!=patientID) {
+            do{
+            cout << "\t\t!User ID entered is wrong." << endl
+             << "\t\tEnter again!" << endl;
+            cout << "\t\tUser ID: ";
+            getline(cin, pt);
+            }while(pt==patientID);
         }
     }
 
@@ -134,14 +170,15 @@ class Patient {
     }
 
     void printDetails() {
-        cout << "\t\t---------------------------" << endl
+        cout << "\t\t---------------------------" 
             << "\n\t\tHERE ARE YOUR DETAILS" << endl
             << "\t\t---------------------------" << endl
             << "\t\tUser ID: " << patientID << endl
             << "\t\tFull Name: " << getname() << endl
             << "\t\tDate of Birth: " << getdob() << endl
             << "\t\tGender: " << getsex() << endl
-            << "\t\tLOGIN SUCCESS." << endl;
+            << "\t\tThank you for registering." << endl;
+            system("cls");
     }
 
 };
@@ -155,14 +192,14 @@ class RegularPatient : public Patient {
     RegularPatient(string contact=" ", string emergency=" "): contactInfo(contact), emergencyContact(emergency) {}
 
     void getData() {
-        system("cls");
-        cout << "\t\tHELLO " << getname() << "!" << endl
-             << "\t\tYou are a REGULAR patient" << endl;
-        cout << "\t\t<<PLEASE ENTER YOUR CONTACT INFO>>" << endl;
+        cout << "\t\tLOGIN SUCCESS." << endl
+             << "\t\tYou are a REGULAR patient" << endl << endl;
+        cout << "\t\t<< PLEASE ENTER YOUR CONTACT INFO >>" << endl;
         cout << "\t\tEnter Contact Info (Phone Num): ";
         getline(cin, contactInfo);
         cout << "\t\tEnter Emergency Contact (Phone Num): ";
         getline(cin, emergencyContact);
+        system("cls");
     }
 };
 
@@ -175,15 +212,15 @@ class specialPatient : public Patient {
     specialPatient(string g = " ", string r = " ", string gc =" "): guardianName(g), relationship(r), guardianContact(gc) {}
 
     void getData() {
-        system("cls");
-        cout << "\t\tHELLO GUARDIAN OF " << getname() << "!" << endl;
-        cout << "\t\t<<PLEASE ENTER YOUR CONTACT INFO>>" << endl;
+        cout << "\t\tLOGIN SUCCESS." << endl
+             << "\t\t<< PLEASE ENTER GUARDIAN INFO >>" << endl << endl;
         cout << "\t\tName: ";
         getline(cin, guardianName);
         cout << "\t\tRelationship with Patient: ";
         getline(cin, relationship);
         cout << "\t\tGuardian Contact Info: ";
         getline(cin, guardianContact);
+        system("cls");
     }
 
 };
@@ -211,7 +248,7 @@ int main() {
     cout << "\t\t|   MEDICATION SCHEDULER :)   |" << endl;
     displayLine();
     // Print the current time
-    cout << "\t\tCurrent time: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
+    cout << "\t\tLOGIN TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
 
     patient.getData();
     patient.authenticate();
@@ -228,7 +265,7 @@ int main() {
     cout << "\t\t[OPTION 1] => Add medication" << endl
          << "\t\t[OPTION 2] => Remove medication" << endl
          << "\t\t[OPTION 3] => See schedule for medicine intake" << endl;
-    cout << "OPTION => ";
+    cout << "\t\tOPTION => ";
     cin >> optionUser;
 
     /*switch(optionUser) {
