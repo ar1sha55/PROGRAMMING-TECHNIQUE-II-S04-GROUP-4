@@ -147,14 +147,16 @@ int main(){
     Frequency a;
     a.setFreq();
     a.printFreq();
+    cout << "test class frequency done.\n\n"
 
 
     // TEST CLASS DAILY FREQUENCY
     dailyFreq b;
-    b.setdailyIntake();
     b.setFreq();
+    b.setdailyIntake();
     b.setTime();
     b.printFreq();
+    cout << "\ntest daily frequency done\n\n";
 
 
     //TEST CLASS WEEKLY FREQUENCY
