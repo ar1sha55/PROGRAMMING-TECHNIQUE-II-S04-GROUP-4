@@ -1,10 +1,8 @@
 #include <iostream>
-using namespace std;
-
 #include <string>
 #include <cmath>
 #include <iomanip>
-
+using namespace std;
 
 class MedType {
     string form, shape, color;
@@ -45,7 +43,7 @@ class Medication {
     MedType medType;//composition
 
     public:
-        Medication(){}
+        Medication(string n, string d): medName(n), dosage(d) {}
         Medication(string n, string d, string s, string c, string f): medName(n), dosage(d), medType(s,c,f){}
 
         string getMedName(){
@@ -63,8 +61,8 @@ class Medication {
         string getMedColor(){
             return medType.getColor();
         }
-        
-        
+
+
         void input(){
             cout << "Enter medication name: ";
             getline(cin, medName); 
@@ -96,9 +94,10 @@ class Medication {
 
 class Report
 {
-    
+
     string startDate;
     string endDate;
+    int month;
     Medication *medication;
 
     public:
@@ -106,58 +105,47 @@ class Report
     Report(string s, string e, Medication *m) : startDate(s), endDate(e), medication(m) {}
 
     // MUTATORS
-    int setSdate()
+    void setSdate()
     {
         int m,d;
-        string sD;
-        cout << "When would you like to start your medication? \n";
-        
+
         do{
-        cout << "(dd-mm-year) : ";
-        getline (cin, sD);
-        startDate = sD;
+        cout << "START DATE (dd-mm-year) : ";
+        getline (cin, startDate);
         string a = startDate.substr(3,2);
         m = stoi(a);
 
         string b = startDate.substr(0,2);
         d = stoi(b);
-        
         if(m > 13 || d > 31 ) // notification pop up if month entered is invalid
         cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
         } while(m > 13 || d > 31);
-        return m;
-
+        month = stoi(startDate.substr(3, 2));
     }
 
     void setEdate()
     {
         int n, e;
-        string eD;
-        cout << "When does this medication end? \n";
-        
-
         do{
-        cout << "(dd-mm-yyyy) : ";
-        getline (cin, eD);
-        endDate = eD;
+        cout << "END DATE (dd-mm-yyyy) : ";
+        getline (cin, endDate);
         string c = endDate.substr(3,2);
         n = stoi(c);
 
         string f = endDate.substr(0,2);
         e = stoi(f);
-        
+
         if(n > 13 || e > 31 ) // notification pop up if month entered is invalid
         cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
         } while(n > 13 || e > 31);
-        endDate = eD;
     }
+
 
     // ACQUIRE MONTH FROM USER
     string getMonth()
     {
-        int m = setSdate();
-        
-        switch(m)
+
+        switch(month)
         {
             case 1 : return "January";
             case 2 : return "February";
@@ -195,26 +183,27 @@ class Report
 
        // for(int i = 1; i < totalMed; i++)
        cout << "MEDICATION " << i << ": \n\n";
-       cout << "Date Start - Date End : " << startDate << endDate << "\n";
+       cout << "Date Start - Date End : " << startDate << " - " << endDate << "\n";
        cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
        cout << "Dosage" << setw(8) << ":  " << m->getDosage() << "\n";
        cout << "Form" << setw(10) << ":  " << m->getMedForm() << "\n";
        cout << "Shape" << setw(9) << ":  " << m->getMedShape()<< "\n";
     }
-    
+
 };
 
 
 int main(){
 
     Report a;
+    Medication med1("Ibuprofen", "500ml");
 
     a.setSdate();
     a.setEdate();
 
     string m = a.getMonth();
 
-    cout << m;
+    a.displayReport(&med1);
 
     system("pause");
     return 0;
