@@ -38,24 +38,33 @@ class Patient {
         return age;
     }
 
+    //method to prescribe med (mutators)
+    void setMed(Medication *m) {
+        med = m;
+    }
+
     ~Patient() {} //destructor
 };
 
 
 int main() {
     Patient patient1; //create object
+    Medication med1("Ibuprofen", "500ml");
     patient1.setID("001");
     patient1.setname("Ali bin Abu");
     patient1.setpassword("Abc123");
     patient1.setdob("18/12/2004");
     patient1.setsex("M");
+    patient1.setMed(&med1);
 
     cout << "Details of Patient 1" << endl
          << "ID: " << patient1.getID() << endl
          << "Name: " << patient1.getname() << endl
          << "DOB: " << patient1.getdob() << endl
          << "Age: " << patient1.getAge() << endl
-         << "Sex: " << patient1.getsex() << endl;
+         << "Sex: " << patient1.getsex() << endl
+         << "Medicine name: " << med1.getMedName() << endl
+         << "Medicine dosage: " << med1.getdosage() << endl;
 
     system("pause");
     return 0;
