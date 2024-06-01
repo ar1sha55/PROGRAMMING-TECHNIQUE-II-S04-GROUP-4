@@ -3,23 +3,70 @@
 
 class Calendar
 {
+    int year, month;
     string startDate;
     string endDate;
+    Medicine medicine[31][7];
+
+    int days(int m, int y){
+        switch(m){
+            case 2: 28;
+            case 4: case 6: case 9: case: 11 return 30;
+            default: return 31;
+        }
+    }
+
+
+    // KIV
+       /*// Helper function to get the starting day of the week
+    int startingDay(int m, int y) {
+        // Zeller's Congruence algorithm
+        if (m < 3) {
+            m += 12;
+            y--;
+        }
+        int k = y % 100;
+        int j = y / 100;
+        int h = (1 + ((13 * (m + 1)) / 5) + k + (k / 4) + (j / 4) + (5 * j)) % 7;
+        return ((h + 5) % 7) + 1;
+    }*/
 
     public:
-        Calendar();
+        Calendar(int y, int m): year(y), month(m)
+        {
+            for(int i = 0; i < 31; i++){
+                for(int j = 0; j < 7; j++){
+                    medicine[i][j] = Medicine();
+                }
+            }
+        }
+
+
         Calendar(string startDate = "", string endDate = ""){
             this->startDate = startDate;
             this->endDate = endDate;
         }
-        Medicine medicine[50];
+        
         ~Calendar();
+
+        void setYear(int year){ this->year = year;}
+        void setMonth(int month){ this->month = month;}
 
         void setstartDate(const string& startDate){ this->startDate = startDate;}
         void setendDate(const string& endDate){ this->endDate = endDate;}
 
         string getstartDate () const { return startDate; }  // y must put const?
         string getendDate () const { return endDate; }
+
+        void displayCal () const
+        {
+            int d = days(month, year);
+            int s = startingDay(month, year);
+            int day = 1;
+
+            cout << "\tSun\tMon\tTue\tWed\tThu\tFri\tSat\n";
+            
+        }
 
 };
 
@@ -58,7 +105,7 @@ class dailyFreq : public Frequency
 };
 
 
-class weeklyFreq : public Frequency
+class weeklyFreq : public Frequency  //inheritance
 {
     int dayPerWeek;
 
