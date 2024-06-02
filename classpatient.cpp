@@ -1,59 +1,16 @@
 #include <iostream>
 #include <string>
 #include "class_med.h"
+#include "class_patient.h"
 using namespace std; 
-
-//parent class
-class Patient {
-    protected:
-    string patientID,  fullname, password, dob, sex;
-    Medication *med; //aggregation with Medication class
-
-    public:
-    Patient(string id=" ", string _name=" ", string pw=" ", string _dob=" ", string _sex=" "): 
-    patientID(id), fullname(_name), password(pw), dob(_dob), sex(_sex) {} //argument constructor
-
-    //mutators
-    void setID(const string &id) {patientID = id;}
-    void setname(const string &n) {fullname = n;}
-    void setpassword(const string &pw) {password = pw;}
-    void setdob(const string &d) {dob = d;}
-    void setsex(const string &s) {sex = s;}
-
-    //accessors
-    string getID() const{return patientID;}
-    string getname() const{return fullname;}
-    string getpassword() const{return password;}
-    string getdob() const{return dob;}
-    string getsex() const{if(sex=="F")
-        return "Female";
-        else
-        return "Male";} //M=Male, F=Female
-
-    //method to calculate age
-    int getAge() {
-        int year, age;
-        year = stoi(dob.substr(6, 4));
-        age = 2024 - year;
-        return age;
-    }
-
-    //method to prescribe med (mutators)
-    void setMed(Medication *m) {
-        med = m;
-    }
-
-    ~Patient() {} //destructor
-};
-
 
 int main() {
     Patient patient1; //create object
-    Medication med1("Ibuprofen", "500ml");
+    Medication med1("Ibuprofen", "500ml"); //initialize constructor
     patient1.setID("001");
     patient1.setname("Ali bin Abu");
     patient1.setpassword("Abc123");
-    patient1.setdob("18/12/2004");
+    patient1.setdob("18/12/2020");
     patient1.setsex("M");
     patient1.setMed(&med1);
 
@@ -65,6 +22,9 @@ int main() {
          << "Sex: " << patient1.getsex() << endl
          << "Medicine name: " << med1.getMedName() << endl
          << "Medicine dosage: " << med1.getdosage() << endl;
+
+    if(patient1.getAge() > 70 || patient1.getAge() < 13) 
+    cout << "You need a GUARDIAN." << endl;
 
     system("pause");
     return 0;
