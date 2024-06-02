@@ -20,11 +20,18 @@ class RegularPatient : public Patient{
     string getcontactInfo() const{return contactInfo;}
     string getemergencyContact() const{return emergencyContact;}
 
+    void printDetails() override {
+        Patient::printDetails();
+        cout << "Contact Info (+60): " << getcontactInfo() << endl
+             << "Emergency Contact (+60): " << getemergencyContact() << endl;
+    }
+
     ~RegularPatient() {} //destructor
 };
 
 int main() {
     RegularPatient patient1; //create object
+    Medication med1("Ibuprofen", "500ml");
     patient1.setID("001");
     patient1.setname("Ali bin Abu");
     patient1.setpassword("Abc123");
@@ -32,15 +39,9 @@ int main() {
     patient1.setsex("M");
     patient1.setcontactInfo("123456789");
     patient1.setemergencyContact("12121212");
+    patient1.setMed(&med1);
 
-    cout << "Details of Patient 1" << endl
-         << "ID: " << patient1.getID() << endl
-         << "Name: " << patient1.getname() << endl
-         << "DOB: " << patient1.getdob() << endl
-         << "Age: " << patient1.getAge() << endl
-         << "Sex: " << patient1.getsex() << endl
-         << "Contact Info (+60): " << patient1.getcontactInfo() << endl
-         << "Emergency Contact (+60): " << patient1.getemergencyContact() << endl;
+    patient1.printDetails();
 
     system("pause");
     return 0;
