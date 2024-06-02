@@ -1,5 +1,6 @@
 #include <iostream>
 #include <string>
+#include <cmath>
 #include <iomanip>
 
 #include "Medication.h"
@@ -22,16 +23,15 @@ class Report
     
     string startDate;
     string endDate;
-    Medication *medication;
+    Medication *medication[20];
     Patient *patient;
     RegularPatient *regularp;
     SpecialPatient *specialp;
     
 
     public:
-    Report() : startDate(""), endDate(""), medication(nullptr), patient(nullptr){}
-    Report(string s, string e, Medication *m, Patient *p) 
-    : startDate(s), endDate(e), medication(m), patient(p) {}
+    Report() : startDate(""), endDate(""){}
+    Report(string s, string e) : startDate(s), endDate(e) {}
 
     // MUTATORS
     int setSdate()
@@ -55,6 +55,13 @@ class Report
         } while(m > 13 || d > 31);
         return m;
 
+    }
+
+    string setYear()
+    {
+        string a;
+        a = startDate.substr(6,4);
+        return a;
     }
 
     void setEdate()
@@ -84,8 +91,6 @@ class Report
     string getMonth()
     {
         int m = setSdate();
-
-        
         
         switch(m)
         {
@@ -104,8 +109,6 @@ class Report
             default : return  "ERROR";
         }
 
-        //string b = toupper(bulan);   
-        //return bulan;
 
     }
 
@@ -120,24 +123,28 @@ class Report
         cout << "YOUR REPORT HAS BEEN DELETED\n\n\n";
     }
 
-    void displayReport(Patient *p, Medication *m)
-    {
-        string bulan = getMonth();
-        int i;
-        cout << setw(55) << bulan <<" MEDICATION REPORT SCHEDULE\n\n";
+    void displayReport(Patient *p)
+    { 
+
+        string a = setYear();
+        
+        cout << "\n\n" << setw(55) << a << " MEDICATION REPORT SCHEDULE\n\n";
 
         cout << "NAME : " << p->getname() << endl;
         cout << "DATE OF BIRTH : " << p->getdob() << endl;
-        cout << "SEX : " << p->getsex() << endl;
+        cout << "SEX : " << p->getsex() << endl << endl << endl;
 
+    }
        
-        cout << "MEDICATION " << 1 << ": \n\n";
+    void displayMed(Medication *m)
+    {
+        
         cout << "Date Start - Date End : " << startDate << " - " <<  endDate << "\n";
         cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
         cout << "Dosage" << setw(8) << ":  " << m->getDosage() << "\n";
         cout << "Form" << setw(10) << ":  " << m->getMedForm() << "\n";
         cout << "Shape" << setw(9) << ":  " << m->getMedShape()<< "\n";
-        cout << "Color" << setw(9) << ":  " << m->getMedColor() << "\n";
+        cout << "Color" << setw(9) << ":  " << m->getMedColor() << "\n\n\n";
     }
     
 };

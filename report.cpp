@@ -19,18 +19,17 @@ int main(){
 
     Patient a("alyaqiistina", "ALYA QISTINA BINTI AWALUDDIN", "Abcd1234", "01-07-2004", "F" );
 
-    Medication m("Ibuprofen", "50ml", "tablet", "oval", "pink" );
+    Medication m[]={{"Ibuprofen", "50ml", "tablet", "oval", "pink"},{"Panadol", "50gsm", "Liquid", "None", "Blue"} };
 
-    Report r("20-09-2015", "20-10-2015", &m, &a);
+    Report r[] = {{"20-02-2019", "30-02-2019"}, {"01-08-2019", "30-08-2019"}};
 
-    r.displayReport(&a, &m);
+    r[1].displayReport(&a);
 
-    //a.setSdate();
-    //a.setEdate();
-
-    //string m = a.getMonth();
-
-    //cout << m;
+    for(int i = 0; i < 2; i++)
+    {
+        cout << "MEDICATION " << i+1 << " : \n\n";
+        r[i].displayMed(&m[i]);
+    };
 
     system("pause");
     return 0;
