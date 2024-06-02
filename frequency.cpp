@@ -22,7 +22,7 @@ class Frequency
         int freqVal;
 
     public:
-        Frequency() : freqVal(0){}
+        Frequency() : freqVal(1){} //set default to at least 1 time per day
         Frequency(int freqVal):freqVal(freqVal){}
 
         void setFreq()
@@ -36,7 +36,7 @@ class Frequency
 
         virtual void printFreq()
         {
-            cout << "Frequency : " << freqVal << " times per day\n";
+            cout << "Frequency : " << freqVal << " time(s) per day\n";
         }
 
         ~Frequency(){}
@@ -53,7 +53,7 @@ class dailyFreq : public Frequency
     double time[10];
 
     public:
-        dailyFreq(): Frequency(0), dailyIntake(0), time() {}
+        dailyFreq(): Frequency(1), dailyIntake(1), time() {}
         dailyFreq(int f, int d, double t): Frequency(f), dailyIntake(d) 
         {
             if(f > 1)
@@ -80,7 +80,7 @@ class dailyFreq : public Frequency
         //AQCUIRE TIME FROM USER
         void setTime()
         {
-            for(int i = 0; i < dailyIntake; i ++)
+            for(int i = 0; i < dailyIntake; i++)
             {
             cout << "What's the time no." << i+1 << " you need to take the medication in a day? \n";
             cout << "24hrs system, (hh.mm) : ";
@@ -116,7 +116,7 @@ class weeklyFreq : public Frequency  //inheritance
     int dayPerWeek;
 
     public:
-        weeklyFreq(): Frequency(0), dayPerWeek(0){}
+        weeklyFreq(): Frequency(1), dayPerWeek(1){}
         weeklyFreq(int f, int dpw): Frequency(f), dayPerWeek(dpw){}
 
         //WEEKLY FRQUENCY DESTRUCTOR
@@ -143,11 +143,11 @@ class weeklyFreq : public Frequency  //inheritance
 
 int main(){
 
-    // TEST CLASS FREQUENCY
+    //TEST CLASS FREQUENCY
     Frequency a;
     a.setFreq();
     a.printFreq();
-    cout << "test class frequency done.\n\n"
+    cout << "test class frequency done.\n\n";
 
 
     // TEST CLASS DAILY FREQUENCY
@@ -162,7 +162,7 @@ int main(){
     //TEST CLASS WEEKLY FREQUENCY
     weeklyFreq c;
     c.setdayPerWeek();
-    c.setFreq();
+    //c.setFreq();
     c.printFreq();
 
 
