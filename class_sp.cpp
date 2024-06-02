@@ -22,11 +22,19 @@ class SpecialPatient: public Patient {
     string getrelatiosnhip() const{return relationship;}
     string getguardianContact() const{return guardianContact;}
 
+    void printDetails() override {
+        Patient::printDetails();
+        cout << "Guardian Name: " << getguardianName() << endl
+             << "Guardian Relationship with Patient: " << getrelatiosnhip() << endl
+             << "Guardian Contact (+60): " << getguardianContact() << endl;
+    }
+
     ~SpecialPatient() {} //destructor
 };
 
 int main() {
     SpecialPatient patient1; //create object
+    Medication med1("Ibuprofen", "500ml");
     patient1.setID("001");
     patient1.setname("Ali bin Abu");
     patient1.setpassword("Abc123");
@@ -35,17 +43,11 @@ int main() {
     patient1.setguardianName("Abu bin Bakar");
     patient1.setrelationship("Father");
     patient1.setguardianContact("24681357");
+    patient1.setMed(&med1);
 
-    cout << "Details of Patient 1" << endl
-         << "ID: " << patient1.getID() << endl
-         << "Name: " << patient1.getname() << endl
-         << "DOB: " << patient1.getdob() << endl
-         << "Age: " << patient1.getAge() << endl
-         << "Sex: " << patient1.getsex() << endl
-         << "Guardian Name: " << patient1.getguardianName() << endl
-         << "Guardian Relationship with Patient: " << patient1.getrelatiosnhip() << endl
-         << "Guardian Contact (+60): " << patient1.getguardianContact() << endl;
+    patient1.printDetails();
 
     system("pause");
     return 0;
 }
+
