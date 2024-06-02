@@ -1,42 +1,24 @@
 #include <iostream>
+#include "class_med.h"
+#include "class_patient.h"
 using namespace std;
 
-class RegularPatient{
+//first child class
+class RegularPatient : public Patient{
     private:
-    string patientID,  fullname, password, dob, sex, contactInfo, emergencyContact;
+    string contactInfo, emergencyContact;
 
     public:
-    RegularPatient(string id=" ", string _name=" ", string pw=" ", string _dob=" ", string _sex=" ", string contact=" ", string emergency=" "): 
-    patientID(id), fullname(_name), password(pw), dob(_dob), sex(_sex), contactInfo(contact), emergencyContact(emergency) {}
+    RegularPatient(string contact=" ", string emergency=" "): 
+    contactInfo(contact), emergencyContact(emergency) {}
  
     //mutators
-    void setID(const string &id) {patientID = id;}
-    void setname(const string &n) {fullname = n;}
-    void setpassword(const string &pw) {password = pw;}
-    void setdob(const string &d) {dob = d;}
-    void setsex(const string &s) {sex = s;}
     void setcontactInfo(const string &cont) {contactInfo = cont;}
     void setemergencyContact(const string &emercon) {emergencyContact = emercon;}
 
     //accessors
-    string getID() const{return patientID;}
-    string getname() const{return fullname;}
-    string getpassword() const{return password;}
-    string getdob() const{return dob;}
-    string getsex() const{if(sex=="F")
-        return "Female";
-        else
-        return "Male";} //M=Male, F=Female
     string getcontactInfo() const{return contactInfo;}
     string getemergencyContact() const{return emergencyContact;}
-
-    //method to calculate age
-    int getAge() {
-        int year, age;
-        year = stoi(dob.substr(6, 4));
-        age = 2024 - year;
-        return age;
-    }
 
     ~RegularPatient() {} //destructor
 };
