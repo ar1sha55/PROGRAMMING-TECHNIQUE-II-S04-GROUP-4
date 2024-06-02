@@ -1,5 +1,5 @@
-//Main file
 #include "Medication.h"
+#include "MedType.h"
 #include <iostream>
 #include <string>
 #include <iomanip>
