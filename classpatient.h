@@ -39,6 +39,17 @@ class Patient {
         return age;
     }
 
+    virtual void printDetails() {
+         cout << "Details of Patient 1" << endl
+         << "ID: " << getID() << endl
+         << "Name: " << getname() << endl
+         << "DOB: " << getdob() << endl
+         << "Age: " << getAge() << endl
+         << "Sex: " << getsex() << endl
+         << "Medicine name: " << med->getMedName() << endl
+         << "Medicine dosage: " << med->getdosage() << endl;
+    }
+
     //method to prescribe med (mutator)
     void setMed(Medication *m) {
         med = m;
