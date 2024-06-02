@@ -1,44 +1,26 @@
 #include <iostream>
+#include "class_med.h"
+#include "class_patient.h"
 using namespace std;
 
-class SpecialPatient{
+//second child class
+class SpecialPatient: public Patient {
     private:
-    string patientID, fullname, password, dob, sex, guardianName, relationship, guardianContact;
+    string guardianName, relationship, guardianContact;
 
     public:
-    SpecialPatient(string id=" ", string _name=" ", string pw=" ", string _dob=" ", string _sex=" ", string g = " ", string r = " ", string gc =" "): 
-    patientID(id), fullname(_name), password(pw), dob(_dob), sex(_sex), guardianName(g), relationship(r), guardianContact(gc) {}
+    SpecialPatient(string g = " ", string r = " ", string gc =" "): 
+    guardianName(g), relationship(r), guardianContact(gc) {}
  
     //mutators
-    void setID(const string &id) {patientID = id;}
-    void setname(const string &n) {fullname = n;}
-    void setpassword(const string &pw) {password = pw;}
-    void setdob(const string &d) {dob = d;}
-    void setsex(const string &s) {sex = s;}
     void setguardianName(const string &g) {guardianName = g;}
     void setrelationship(const string &r) {relationship = r;}
     void setguardianContact(const string &gc) {guardianContact = gc;}
 
     //accessors
-    string getID() const{return patientID;}
-    string getname() const{return fullname;}
-    string getpassword() const{return password;}
-    string getdob() const{return dob;}
-    string getsex() const{if(sex=="F")
-        return "Female";
-        else
-        return "Male";} //M=Male, F=Female
     string getguardianName() const{return guardianName;}
     string getrelatiosnhip() const{return relationship;}
     string getguardianContact() const{return guardianContact;}
-
-    //method to calculate age
-    int getAge() {
-        int year, age;
-        year = stoi(dob.substr(6, 4));
-        age = 2024 - year;
-        return age;
-    }
 
     ~SpecialPatient() {} //destructor
 };
