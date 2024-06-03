@@ -17,13 +17,13 @@ class Frequency
         int freqVal;
 
     public:
-        Frequency() : freqVal(0){}
+        Frequency() : freqVal(1){}
         Frequency(int freqVal):freqVal(freqVal){}
 
         // MUTATOR
         void setFreq()
         {
-            cout << "Number of doses you need to take at one time : ";
+            cout << "\nNumber of doses you need to take at one time : ";
             cin >> freqVal;
         }
 
@@ -37,6 +37,7 @@ class Frequency
             cout << "Frequency : " << freqVal << " each time\n";
         }
 
+        // Destructor
         ~Frequency(){}
 
 };

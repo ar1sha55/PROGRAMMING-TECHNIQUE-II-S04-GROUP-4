@@ -1,6 +1,7 @@
 #ifndef DAILYFREQ_H
 #define DAILYFREQ_H
 
+// Include parent class file
 #include "Frequency.h"
 
 #include <iostream>
@@ -37,7 +38,7 @@ class dailyFreq : public Frequency
         //AQCUIRE DAILY INTAKE FROM USER
         void setdailyIntake()
         {
-            cout << "How many times do you need to take the the medicine in a day?\n";
+            cout << "\nHow many times do you need to take the the medicine in a day?\n";
             cin >> dailyIntake;
         }
 
@@ -46,7 +47,7 @@ class dailyFreq : public Frequency
         {
             for(int i = 0; i < dailyIntake; i++)
             {
-            cout << "What's the time no." << i+1 << " you need to take the medication in a day? \n";
+            cout << "\nWhat's the time no." << i+1 << " you need to take the medication in a day? \n";
             cout << "24hrs system, (hh.mm) : ";
             cin >> time[i];
             }
@@ -62,7 +63,7 @@ class dailyFreq : public Frequency
         {
             cout << fixed << setprecision(2);
             Frequency :: printFreq();
-            cout << "You need to take " << dailyIntake << "per day.\n";
+            cout << "\nYou need to take " << dailyIntake << "per day.\n";
             cout << "Time: " ;
             for(int i = 0; i < dailyIntake; i++)
             {

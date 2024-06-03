@@ -30,11 +30,11 @@ class weeklyFreq : public Frequency  //inheritance
         int getdayPerWeek() const{ return dayPerWeek; }
         
 
-        //PRINT WEEKLY FREQUENCY 
+        //PRINT WEEKLY FREQUENCY (POLYMORPHISM)
         void printFreq() override
         {
-            cout << "This medicine needs to be taken " << dayPerWeek << " day(s) per week, and\n";
-            Frequency :: printFreq();
+            cout << "\nThis medicine needs to be taken " << dayPerWeek << " day(s) per week, and\n";
+            Frequency :: printFreq(); // print also the general frequency
         }
 };
 

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <iomanip>
 
+//Include all neccessary files
 #include "Medication.h"
 #include "MedType.h"
 #include "Frequency.h"
@@ -23,11 +24,9 @@ class Report
     
     string startDate;
     string endDate;
-    Medication *medication[20];
-    Patient *patient;
-    RegularPatient *regularp;
-    SpecialPatient *specialp;
-    
+    Medication *medication[20];  //Aggregation
+    Patient *patient;            //Aggregation
+
 
     public:
     Report() : startDate(""), endDate(""){}
@@ -40,6 +39,8 @@ class Report
         string sD;
         cout << "When would you like to start your medication? \n";
         
+
+        // Extract month from user
         do{
         cout << "(dd-mm-year) : ";
         getline (cin, sD);
@@ -50,13 +51,14 @@ class Report
         string b = startDate.substr(0,2);
         d = stoi(b);
         
-        if(m > 13 || d > 31 ) // notification pop up if month entered is invalid
+        if(m > 13 || d > 31 ) // notification pop up if month/day entered is invalid
         cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
         } while(m > 13 || d > 31);
         return m;
 
     }
 
+    // Extract year from user
     string setYear()
     {
         string a;
@@ -135,7 +137,8 @@ class Report
         cout << "SEX : " << p->getsex() << endl << endl << endl;
 
     }
-       
+
+    // Display medication (Aggregation)
     void displayMed(Medication *m)
     {
         
@@ -150,3 +153,7 @@ class Report
 };
 
 #endif
+
+
+
+

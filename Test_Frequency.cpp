@@ -14,28 +14,30 @@ using namespace std;
 int main(){
 
     // TEST CLASS FREQUENCY
-    cout << "TESTING PARENT CLASS FREQUENCY\n"
+    cout << "\n\nTEST CLASS FREQUENCY\n";
     Frequency a;
     a.setFreq();
     a.printFreq();
+    cout << "TEST CLASS FREQUENCY DONE \n\n";
 
 
     // TEST CLASS DAILY FREQUENCY
-    cout << "TESTING CHILD CLASS 1 : DAILY FREQUENCY\n"
+    cout << "TEST CLASS DAILY FREQUENCY\n";
     dailyFreq b;
     b.setdailyIntake();
     b.setFreq();
     b.setTime();
     b.printFreq();
+    cout << "TEST CLASS DAILY FREQUENCY DONE \n\n";
 
 
     //TEST CLASS WEEKLY FREQUENCY
-    cout << "TESTING CHILD CLASS 2 : WEEKLY FREQUENCY\n"
+    cout << "TEST CLASS WEEKLY FREQUENCY\n";
     weeklyFreq c;
     c.setdayPerWeek();
     c.setFreq();
     c.printFreq();
-
+    cout << "TEST CLASS WEEKLY FREQUENCY DONE";
 
     system("pause");
     return 0;
