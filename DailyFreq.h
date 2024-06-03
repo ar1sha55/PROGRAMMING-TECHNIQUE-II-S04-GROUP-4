@@ -37,7 +37,7 @@ class dailyFreq : public Frequency
         //AQCUIRE DAILY INTAKE FROM USER
         void setdailyIntake()
         {
-            cout << "Number of doses you need to take at one time : ";
+            cout << "How many times do you need to take the the medicine in a day?\n";
             cin >> dailyIntake;
         }
 
@@ -57,11 +57,12 @@ class dailyFreq : public Frequency
         double getTime(int i) const{ return time[i]; }
         
 
-        //PRINT DAILY FREQUENCY 
+        //PRINT DAILY FREQUENCY (POLYMORPHISM)
         void printFreq() override
         {
+            cout << fixed << setprecision(2);
             Frequency :: printFreq();
-            cout << "You need to take " << dailyIntake << " each time.\n";
+            cout << "You need to take " << dailyIntake << "per day.\n";
             cout << "Time: " ;
             for(int i = 0; i < dailyIntake; i++)
             {

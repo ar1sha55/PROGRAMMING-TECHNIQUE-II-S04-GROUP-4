@@ -1,3 +1,4 @@
+
 #include <iostream>
 using namespace std;
 #ifndef FREQUENCY_H
@@ -5,10 +6,13 @@ using namespace std;
 
 
 
+
+
 //PARENT CLASS INHERITANCE
 
 class Frequency
 {
+    // so that child class have access
     protected:
         int freqVal;
 
@@ -16,18 +20,21 @@ class Frequency
         Frequency() : freqVal(0){}
         Frequency(int freqVal):freqVal(freqVal){}
 
+        // MUTATOR
         void setFreq()
         {
-            cout << "How many times do you need to take the the medicine in a day?\n";
+            cout << "Number of doses you need to take at one time : ";
             cin >> freqVal;
         }
 
+        // ACCESSOR
         int getFreq() const { return freqVal; }
 
-
+        //POLYMORPHISM
+        // default print from parent class
         virtual void printFreq()
         {
-            cout << "Frequency : " << freqVal << " times per day\n";
+            cout << "Frequency : " << freqVal << " each time\n";
         }
 
         ~Frequency(){}
