@@ -140,7 +140,7 @@ class MedType {
     public:
         //constructor
         MedType(){}
-        MedType(string f, string s, string c): form(f),shape(s), color(c){}
+        MedType(string f, string s, string c): form(f), shape(s), color(c){}
 
 
         //accessor
@@ -149,17 +149,29 @@ class MedType {
         string getMedColor() {return color;}
 
         //functions
-        void read(){
+        void read()
+        {
         cout << "Enter form (tablet, capsule, powder, liquid): ";
+        
         getline(cin, form);
-        if (form=="tablet" || form=="capsule"){
+
+        if (form=="tablet" || form=="capsule")
+        {
             cout << "Enter shape (round, oval): ";
             getline(cin, shape);
-        }else{
+        }
+        
+        else if(form == "powder" || form == "liquid")
+        {
             shape = "None";
         }
+
+        else shape = "-";
+
         cout << "Enter color: ";
+        
         getline(cin, color);
+
         }
 
         //destructor
@@ -200,11 +212,11 @@ class Medication {
             cout << "No medication available.\n" << endl;
         }else{
             cout << left;
-            cout << setw(20) << "Medication"<< setw(10) << "Dosage" << setw(10) << "Form" << setw(10) << "Shape" << setw(10) << "Color" << endl;
+            cout << setw(20) << "MEDICATION"<< setw(10) << "DOSAGE" << setw(10) << "FORM" << setw(10) << "SHAPE" << setw(10) << "COLOR" << endl;
         }
     }
     void outputMed(){
-        cout << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << "\n\t";
+        cout << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << "\n";
     }
 
     //destructor
@@ -408,7 +420,6 @@ class Report
     {
         int m,d;
         string sD;
-        cout << "When would you like to start your medication? ";
         
         // Extract month from user
         do{
@@ -439,7 +450,6 @@ class Report
     {
         int n, e;
         string eD;
-        cout << "When does this medication end? ";
         
         do{
         cout << "(dd-mm-yyyy) : ";
@@ -456,31 +466,6 @@ class Report
         cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
         } while(n > 13 || e > 31);
         endDate = eD;
-    }
-
-    // ACQUIRE MONTH FROM USER
-    string getMonth()
-    {
-        int m = setSdate();
-        
-        switch(m)
-        {
-            case 1 : return "January";
-            case 2 : return  "February";
-            case 3 : return "March";
-            case 4 : return  "April";
-            case 5 : return "May";
-            case 6 : return "June";
-            case 7 : return "July";
-            case 8 : return  "August";
-            case 9 : return "September";
-            case 10 : return  "October";
-            case 11 : return "November";
-            case 12 : return  "December";
-            default : return  "ERROR";
-        }
-
-
     }
 
 
@@ -562,7 +547,7 @@ int main() {
     SpecialPatient sPatient;
     Medication *med = new Medication[50];
     MedType *mt;
-    Report report;
+    Report *report = new Report[50];
 
     //TIME-FOR MEDICATION INTAKE 
     time_t now = time(nullptr);
@@ -584,15 +569,20 @@ int main() {
         system("cls");
         sPatient.printDetails();
     }
+
     else{
         rPatient.getData();
         system("cls");
         rPatient.printDetails();
         } //for regular patient
 
-    while(!false){
+    while(!false)
+    {
+
     int optionUser = userOption(); //for user option
-    switch(optionUser) {
+
+    switch(optionUser) 
+    {
         case 1: 
         {
             cout << "\nYou have chosen ADD MEDICATION" << endl
@@ -612,40 +602,79 @@ int main() {
             {
             cout << i+1 << "\t";
             med[i].outputMed();
+            cout << ""; 
             }
             returnorexit();
             break;
             }
 
-        case 2: {if(numMed == 0)
+        case 2: 
+        {
+            if(numMed == 0)
                 cout << "\n\t\tYou have no record of medication to remove";
-                else{
+            else
+            {
                 string mdname;
                 // cout << "\t\tPlease remove medication" << endl; what dis for??
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
-                for(int i=0; i<numMed; i++){
-                    if(mdname == med[i].getMedName()){
-                        for(int j=i; j<numMed-1; j++){
-                            med[j] = med[j+1];
+                for(int i=0; i<numMed; i++)
+                {
+                    if(mdname == med[i].getMedName())
+                    {
+                        for(int j=i; j<numMed-1; j++)
+                        {
+                        med[j] = med[j+1];
                         }
                         numMed--;
                         //break;
                     }
                 }
-                }
+            }
                 returnorexit();
-                break;}
+                break;
+        }
 
-        case 3: {cout << "\t\tView report\n";
-        report.setSdate();
-        report.setEdate();
-        report.displayReport(&patient);
-        report.displayMed(med, mt);
-        break;}
-        default: {cout << "\t\tInvalid option!" << endl; 
-        userOption();}
+        case 3: 
+        {
+            cout << "You have chosen to VIEW REPORT\n\n";
+
+            for(int i = 0; i < numMed; i++)
+            {
+                cout << "DATES FOR MEDICATION 1 : " << med[i].getMedName() << "\n";
+                cout << "When would you like to start your medication " << i+1 << " ? ";
+                report[i].setSdate();
+                
+                cout << "When does this medication " << i+1 << " end? ";
+                report[i].setEdate();
+
+                system("cls");
+            }
+
+            report[1].displayReport(&patient); // Display report, display patient's information
+
+            for(int i = 0; i < numMed; i++)
+            {
+                cout << "MEDICATION " << i+1 << " : \n\n";
+                report[i].displayMed(&med[i], &mt[i]);
+            };
+
+
+
+
+            /*report.setSdate();
+            report.setEdate();
+            report.displayReport(&patient);
+            report.displayMed(med, mt);*/
+            break;
+        }
+
+        default: 
+        {
+            cout << "\t\tInvalid option!" << endl; 
+            userOption();
+        }
         break; 
     }
     }
