@@ -209,6 +209,11 @@ class Medication {
         wFreq.setdayPerWeek();
     }
 
+    void freqOutput() {
+        cout << "FREQUENCY OF MEDICINE" << endl;
+        dFreq.printFreq();
+        wFreq.printFreq();
+    }
 
     void output(int num){
         if(num==0){
@@ -493,6 +498,8 @@ class Report
         } else {
             cout << "MedType details not available." << endl;
         }
+
+        m->freqOutput();
     }
 
     ~Report()
@@ -698,3 +705,4 @@ int main() {
     return 0;
     
 }
+
