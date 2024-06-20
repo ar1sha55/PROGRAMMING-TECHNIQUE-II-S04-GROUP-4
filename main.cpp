@@ -247,9 +247,9 @@ class Patient {
     string getname() const{return fullname;}
     string getpassword() const{return password;}
     string getdob() const{return dob;}
-    string getsex() const{
-        if(sex=="F") return "Female";
-        else if(sex=="M") return "Male";
+     string getsex() const{
+        if(sex=="f") return "Female";
+        else if(sex=="m") return "Male";
         return "";} //M=Male, F=Female
 
      virtual void getData() { //for first time
