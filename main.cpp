@@ -247,7 +247,7 @@ class Patient {
     string getname() const{return fullname;}
     string getpassword() const{return password;}
     string getdob() const{return dob;}
-     string getsex() const{
+    string getsex() const{
         if(sex=="f") return "Female";
         else if(sex=="m") return "Male";
         return "";} //M=Male, F=Female
@@ -267,12 +267,13 @@ class Patient {
         getline(cin, dob);
         cout << "\t\tGender (M/F): ";
         getline(cin, sex);
-        for(int i = 0; i < sex.length(); i++)
-        sex = tolower(sex[i]);
+        for(int i = 0; i < sex.length(); i++){
+            sex = tolower(sex[i]);
+        } 
     }
 
     //method to calculate age (assume DD/MM/YYYY format)
-    int getAge() {
+    int getAge() const {
             int year, age;
             try {
                 size_t pos1 = dob.find('/');
@@ -309,13 +310,12 @@ class Patient {
     }
 }
 
-     virtual void printDetails() {
+     virtual void printDetails() const{
         cout << "---PATIENT DETAILS---" << endl;
         cout << "NAME          : " << getname() << endl
              << "DATE OF BIRTH : " << getdob() << endl
              << "GENDER        : " << getsex() << endl 
              << "AGE           : " << getAge() << endl << endl;
-
          /*<< "Medicine name: " << med->getMedName() << endl
          << "Medicine dosage: " << med->getMedDosage() << endl; */
     }
@@ -353,7 +353,7 @@ class RegularPatient : public Patient{
         getline(cin, emergencyContact);
     }
 
-    void printDetails() override {
+    void printDetails() const override {
         Patient::printDetails();
         cout << "Contact Info (+60): " << getcontactInfo() << endl
              << "Emergency Contact (+60): " << getemergencyContact() << endl;
@@ -389,7 +389,7 @@ class SpecialPatient: public Patient {
         getline(cin, guardianContact);
     }
 
-    void printDetails() override {
+    void printDetails() const override {
         Patient::printDetails();
         cout << "Guardian Name: " << getguardianName() << endl
              << "Guardian Relationship with Patient: " << getrelationship() << endl
@@ -403,8 +403,8 @@ class SpecialPatient: public Patient {
 class Report
 {
     string startDate, endDate;
-    Medication *medication[20];  //Aggregation
-    Patient *patient;            //Aggregation
+    Medication *medication[20]; 
+    Patient *patient;           
     MedType *medtype[20];
     Frequency *freq[20];
 
@@ -420,7 +420,7 @@ class Report
         
         // Extract month from user
         do{
-        cout << "(dd-mm-year) : ";
+        cout << "(DD/MM) : ";
         cin.ignore();
         getline (cin, sD);
         startDate = sD;
@@ -438,10 +438,10 @@ class Report
     }
 
     // Extract year from user
-    string setYear()
+    /*string setYear()
     { 
         return startDate.substr(6,4);
-    }
+    }*/
 
     void setEdate()
     {
@@ -449,7 +449,7 @@ class Report
         string eD;
         
         do{
-        cout << "(dd-mm-yyyy) : ";
+        cout << "(DD/MM) : ";
         cin.ignore();
         getline (cin, eD);
         endDate = eD;
@@ -486,10 +486,13 @@ class Report
         cout << "Date Start - Date End : " << startDate << " - " <<  endDate << "\n";
         cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
         cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
+        if (mt!=NULL) {
         cout << "Form" << setw(10) << ":  " << mt->getMedForm() << "\n";
         cout << "Shape" << setw(9) << ":  " << mt->getMedShape()<< "\n";
         cout << "Color" << setw(9) << ":  " << mt->getMedColor() << "\n";
-        //cout << "Frequency" << setw(7) << ": " << *freq.printFreq() << "\n\n";
+        } else {
+            cout << "MedType details not available." << endl;
+        }
     }
 
     ~Report()
@@ -499,6 +502,14 @@ class Report
     }
     
 };
+
+void displayAllMedications(Report *report, Medication *med, MedType *mt, int numMed) {
+    for (int i = 0; i < numMed; ++i) {
+        cout << "Medication " << i + 1 << ":\n";
+        report[i].displayMed(&med[i], &mt[i]);
+        cout << endl;
+    }
+}
 
 void displayLine() {
     cout << "\t\t";
@@ -527,10 +538,11 @@ int returnorexit() {
     cout << "\n\t\tPress [1] to return to menu, [2] to exit system [ ]\b\b";
     cin >> choose;
     return choose;
+    system("cls");
 }
 
 int main() {
-    
+
     int numMed=0;
 
     Patient patient;
@@ -545,11 +557,11 @@ int main() {
     time_t now = time(nullptr);
 
     displayLine();
-    cout << "\t\t|      HI!! WELCOME TO        |" << endl;
-    cout << "\t\t|   MEDICATION SCHEDULER :)   |" << endl;
+    cout << "\t\t|       HI!! WELCOME TO        |" << endl;
+    cout << "\t\t| 2024 MEDICATION SCHEDULER :) |" << endl;
     displayLine();
     // Print the current time
-    cout << "\t\tLOGIN TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
+    cout << "\t\tCURRENT TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
 
     patient.getData(); //get patient data
     patient.login(); //authenticate login process
@@ -588,7 +600,7 @@ int main() {
 
                 cout << "MEDICATION " << i+1 << " : \n\n";
                 med[i].input();
-                system("cls");
+                //system("cls");
             }
 
             int c = returnorexit();
@@ -602,7 +614,8 @@ int main() {
         {
             if(numMed == 0)
                 cout << "\n\t\t! ERROR !" << endl
-                << "\t\tYou have no record of medication to remove" << endl;
+                << "\t\tYou have no record of medication to remove" << endl 
+                << "\t\tPress 1 to add medication" << endl << endl;
             else
             {
                 string mdname;
@@ -655,12 +668,9 @@ int main() {
                 }
 
                 report[0].displayReport(&patient); // Display report, display patient's information
-
-                for(int i = 0; i < numMed; i++)
-                {
-                    cout << "MEDICATION " << i+1 << " : \n\n";
-                    report[i].displayMed(&med[i], &mt[i]);
-                };
+                for (int i = 0; i < numMed; ++i) {
+                        report[0].displayMed(&med[i], &mt[i]);
+                    }
             }
                 int c = returnorexit();
                 if(c==2)
