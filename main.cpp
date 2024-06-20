@@ -173,7 +173,13 @@ class MedType {
         
         getline(cin, color);
         setMedColor(color);
+        }
 
+        void printMedType()
+        {
+            cout << "Form" << setw(10) << ":  " << form << "\n";
+            cout << "Shape" << setw(9) << ":  " << shape << "\n";
+            cout << "Color" << setw(9) << ":  " << color << "\n";        
         }
 
         //destructor
@@ -198,7 +204,8 @@ class Medication {
     string getMedDosage() {return dosage;}
 
     //functions
-    void input(){
+    void input()
+    {
         cout << "Enter medication name: ";
         cin.ignore();
         getline(cin, medName); 
@@ -210,14 +217,20 @@ class Medication {
         wFreq.setdayPerWeek();
     }
 
-    void freqOutput() {
+    void freqOutput() 
+    {
         wFreq.printFreq();
         dFreq.printFreq();
         cout << "\n\n";
-
     }
 
-    void output(int num){
+    void medtypeOutput()
+    {
+        medType.printMedType();
+    }
+
+    void output(int num)
+    {
         if(num==0){
             cout << "No medication available.\n" << endl;
         }else{
@@ -493,18 +506,10 @@ class Report
         cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
         cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
 
-        if (mt!=NULL) 
-        {
-        cout << "Form" << setw(10) << ":  " << mt->getMedForm() << "\n";
-        cout << "Shape" << setw(9) << ":  " << mt->getMedShape()<< "\n";
-        cout << "Color" << setw(9) << ":  " << mt->getMedColor() << "\n";
-        } 
+        if (mt!=NULL) m->medtypeOutput();
 
-        else 
-        {
-            cout << "MedType details not available." << endl;
-        }
-
+        else cout << "MedType details not available." << endl;
+        
         m->freqOutput();
     }
 
