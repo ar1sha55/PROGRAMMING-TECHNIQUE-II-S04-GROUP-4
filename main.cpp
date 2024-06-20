@@ -477,9 +477,7 @@ class Report
     void displayReport(Patient *p)
     { 
         
-        string a = setYear();
-        
-        cout << "\n\n" << setw(55) << a << " MEDICATION REPORT SCHEDULE\n\n";
+        cout << "\n\n" << setw(55) << 2024 << " MEDICATION REPORT SCHEDULE\n\n";
 
         p->printDetails();
         
@@ -585,13 +583,16 @@ int main() {
     {
         case 1: 
         {
-            cout << "\nYou have chosen ADD MEDICATION" << endl
+            cout << "\nYou have chosen to ADD MEDICATION" << endl
                 << "How many medications do you want to add? [   ]\b\b\b";
             cin >> numMed;
             system("cls");
 
             for(int i = 0; i < numMed; i++) {
+                
+                cout << "MEDICATION " << i+1 << " : \n\n";
                 med[i].input();
+                system("cls");
             }
                 
             system("cls");
@@ -606,7 +607,8 @@ int main() {
             }
             returnorexit();
             break;
-            }
+
+        }
 
         case 2: 
         {
@@ -615,7 +617,7 @@ int main() {
             else
             {
                 string mdname;
-                // cout << "\t\tPlease remove medication" << endl; what dis for??
+                cout << "\t\tYou have chosen to REMOVE MEDICATION\n\n" << endl;
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
@@ -640,33 +642,36 @@ int main() {
         {
             cout << "You have chosen to VIEW REPORT\n\n";
 
-            for(int i = 0; i < numMed; i++)
+            if(numMed == 0)
             {
-                cout << "DATES FOR MEDICATION 1 : " << med[i].getMedName() << "\n";
-                cout << "When would you like to start your medication " << i+1 << " ? ";
-                report[i].setSdate();
-                
-                cout << "When does this medication " << i+1 << " end? ";
-                report[i].setEdate();
+                report[0].displayReport(&patient);
+                cout << "\n\n *You have no medication scheduled.\n**Press 1 to add medication.\n\n";
 
-                system("cls");
             }
 
-            report[1].displayReport(&patient); // Display report, display patient's information
-
-            for(int i = 0; i < numMed; i++)
+            else
             {
-                cout << "MEDICATION " << i+1 << " : \n\n";
-                report[i].displayMed(&med[i], &mt[i]);
-            };
+                for(int i = 0; i < numMed; i++)
+                {
+                    cout << "DATES FOR MEDICATION " << i+1 << " : " << med[i].getMedName() << "\n";
+                    cout << "When would you like to start your medication " << i+1 << " ? ";
+                    report[i].setSdate();
 
+                    cout << "When does this medication " << i+1 << " end? ";
+                    report[i].setEdate();
 
+                    system("cls");
+                }
 
+                report[1].displayReport(&patient); // Display report, display patient's information
 
-            /*report.setSdate();
-            report.setEdate();
-            report.displayReport(&patient);
-            report.displayMed(med, mt);*/
+                for(int i = 0; i < numMed; i++)
+                {
+                    cout << "MEDICATION " << i+1 << " : \n\n";
+                    report[i].displayMed(&med[i], &mt[i]);
+                };
+            }
+
             break;
         }
 
