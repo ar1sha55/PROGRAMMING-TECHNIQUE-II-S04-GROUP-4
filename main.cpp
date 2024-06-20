@@ -73,7 +73,7 @@ class dailyFreq : public Frequency
             for(int i = 0; i < dailyIntake; i++)
             {
             cout << "\nWhat's the time no." << i+1 << " you need to take the medication in a day? \n";
-            cout << "24hrs system, (hh.mm) : ";
+            cout << "24hrs system (hh.mm) : ";
             cin >> time[i];
             }
         }
@@ -87,13 +87,13 @@ class dailyFreq : public Frequency
         void printFreq() override
         {
             cout << fixed << setprecision(2);
-            //Frequency :: printFreq();
-            cout << "\nYou need to take " << dailyIntake << "per day.\n";
+            cout << "\nYou need to take " << dailyIntake << " per day.\n";
             cout << "Time: " ;
             for(int i = 0; i < dailyIntake; i++)
             {
-            cout <<  time[i] << "\n" << setw(10);
+                cout << time[i] << "\n" << setw(11) << endl;
             }
+            Frequency :: printFreq();
         }
 
 };
@@ -112,7 +112,7 @@ class weeklyFreq : public Frequency  //inheritance
         //AQCUIRE DAYPERWEEK FROM USER
         void setdayPerWeek()
         {
-            cout << "How many times do you need to take the medication per week?\n";
+            cout << "\nHow many times do you need to take the medication per week?\n";
             cin >> dayPerWeek;
         }
 
@@ -205,14 +205,16 @@ class Medication {
         cout << "Enter dosage(500mg, 5ml): ";
         getline(cin, dosage);
         medType.read();
+        frequency.setFreq();
         dFreq.setdailyIntake();
         wFreq.setdayPerWeek();
     }
 
     void freqOutput() {
-        cout << "FREQUENCY OF MEDICINE" << endl;
-        dFreq.printFreq();
         wFreq.printFreq();
+        dFreq.printFreq();
+        cout << "\n\n";
+
     }
 
     void output(int num){
@@ -455,7 +457,6 @@ class Report
         
         do{
         cout << "(DD/MM) : ";
-        cin.ignore();
         getline (cin, eD);
         endDate = eD;
         string c = endDate.substr(3,2);
@@ -491,11 +492,16 @@ class Report
         cout << "Date Start - Date End : " << startDate << " - " <<  endDate << "\n";
         cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
         cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
-        if (mt!=NULL) {
+
+        if (mt!=NULL) 
+        {
         cout << "Form" << setw(10) << ":  " << mt->getMedForm() << "\n";
         cout << "Shape" << setw(9) << ":  " << mt->getMedShape()<< "\n";
         cout << "Color" << setw(9) << ":  " << mt->getMedColor() << "\n";
-        } else {
+        } 
+
+        else 
+        {
             cout << "MedType details not available." << endl;
         }
 
@@ -571,6 +577,9 @@ int main() {
     cout << "\t\tCURRENT TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
 
     patient.getData(); //get patient data
+
+    system("cls");
+
     patient.login(); //authenticate login process
 
     int age = patient.getAge();
@@ -603,11 +612,11 @@ int main() {
             cin >> numMed;
             system("cls");
 
-            for(int i = 0; i < numMed; i++) {
-
-                cout << "MEDICATION " << i+1 << " : \n\n";
+            for(int i = 0; i < numMed; i++) 
+            {
+                cout << "\n\nMEDICATION " << i+1 << " : \n\n";
                 med[i].input();
-                //system("cls");
+                system("cls");
             }
 
             int c = returnorexit();
@@ -675,9 +684,11 @@ int main() {
                 }
 
                 report[0].displayReport(&patient); // Display report, display patient's information
-                for (int i = 0; i < numMed; ++i) {
-                        report[0].displayMed(&med[i], &mt[i]);
-                    }
+                for (int i = 0; i < numMed; ++i) 
+                {
+                    cout << "\nMEDICATION " << i+1 << endl;
+                    report[0].displayMed(&med[i], &mt[i]);
+                }
             }
                 int c = returnorexit();
                 if(c==2)
@@ -705,4 +716,3 @@ int main() {
     return 0;
     
 }
-
