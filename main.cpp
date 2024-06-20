@@ -336,8 +336,6 @@ class Patient {
              << "DATE OF BIRTH : " << getdob() << endl
              << "GENDER        : " << getsex() << endl 
              << "AGE           : " << getAge() << endl << endl;
-         /*<< "Medicine name: " << med->getMedName() << endl
-         << "Medicine dosage: " << med->getMedDosage() << endl; */
     }
 
 
@@ -507,8 +505,6 @@ class Report
         cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
 
         if (mt!=NULL) m->medtypeOutput();
-
-        else cout << "MedType details not available." << endl;
         
         m->freqOutput();
     }
@@ -543,8 +539,8 @@ int userOption() {
          << "\t\tChoose your task for today." << endl;
     cout << "\t\t[OPTION 1] => Add medication" << endl
          << "\t\t[OPTION 2] => Remove medication" << endl
-         << "\t\t[OPTION 3] => See schedule for medicine intake" << endl
-         << "\t\t[OPTION 4] => Exit system." << endl << endl;
+         << "\t\t[OPTION 3] => View list of medicine(s)" << endl
+         << "\t\t[OPTION 4] => View report and exit system." << endl << endl;
     cout << "\t\tOPTION => [ ]\b\b";
     cin >> useropt;
     system("cls");
@@ -562,6 +558,9 @@ int returnorexit() {
 int main() {
 
     int numMed=0;
+    int addMedNum, removeMedNum;
+    string addMed[20]; //store name of meds added 
+    string removeMed[20];  //store name of meds removed
 
     Patient patient;
     RegularPatient rPatient;
@@ -617,12 +616,15 @@ int main() {
             cin >> numMed;
             system("cls");
 
-            for(int i = 0; i < numMed; i++) 
-            {
-                cout << "\n\nMEDICATION " << i+1 << " : \n\n";
-                med[i].input();
-                system("cls");
-            }
+                for (int i = 0; i < numMed; ++i) 
+                {
+                    cout << "\n\nMEDICATION " << i+1 << " : \n\n";
+                    med[i].input();
+                    string medname = med[i].getMedName();
+                    addMed[addMedNum++] = medname;
+                    system("cls");
+                }
+
 
             int c = returnorexit();
             if(c==2)
@@ -644,6 +646,9 @@ int main() {
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
+
+                bool found = 0;
+
                 for(int i=0; i<numMed; i++)
                 {
                     if(mdname == med[i].getMedName())
@@ -651,11 +656,15 @@ int main() {
                         for(int j=i; j<numMed-1; j++)
                         {
                         med[j] = med[j+1];
+                        removeMed[removeMedNum++] = mdname;
                         }
                         numMed--;
-                        //break;
+                        found = 1;
+                        break;
                     }
                 }
+
+                if(!found) cout << "\n\t\tError! Medicine cannot be found.\n\n";
             }
                 int c = returnorexit();
                 if(c==2)
@@ -664,8 +673,20 @@ int main() {
         }
 
         case 3: 
-        {
-            cout << "You have chosen to VIEW REPORT\n\n";
+       {cout << "You have chosen DISPLAY LIST OF MEDICINES" << endl;
+        cout << "LIST OF MEDICINE(S) ADDED: " << endl;
+        for(int k = 0; k < addMedNum; k++) {
+            cout << k+1 << ". " << addMed[k] << endl << endl;
+        }
+        
+        cout << "LIST OF MEDICINE(S) REMOVED: " << endl;
+        for(int j = 0; j < removeMedNum; j++) {
+            cout << j+1 << ". " << removeMed[j] << endl << endl;
+        }
+            break;}
+
+        case 4:{
+        cout << "You have chosen to VIEW REPORT\n\n";
 
             if(numMed == 0)
             {
@@ -695,14 +716,9 @@ int main() {
                     report[0].displayMed(&med[i], &mt[i]);
                 }
             }
-                int c = returnorexit();
-                if(c==2)
-                exit = 1;
-                break;
+            return 0;
         }
 
-
-        case 4: return 0; 
         default: 
         {
             cout << "\t\tInvalid option!" << endl
@@ -716,7 +732,10 @@ int main() {
     }
     }
 
-    delete[] med; //delete DMA 
+    delete[] freq;
+    delete[] report;
+    delete[] mt;
+    delete[] med;
     system("pause");
     return 0;
     
