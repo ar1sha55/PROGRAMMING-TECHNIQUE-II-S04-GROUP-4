@@ -5,12 +5,6 @@
 
 using namespace std;
 
-class MyException: public exception { //create our own exception class that extended from the built in exception class
-    public:
-    const char* what() const throw() {
-        return "MyException error";
-    }
-};
 class Frequency
 {
     // so that child class have access
@@ -144,9 +138,14 @@ class MedType {
 
 
         //accessor
-        string getMedForm() {return form;}
-        string getMedShape() {return shape;}
-        string getMedColor() {return color;}
+        string getMedForm() const {return form;}
+        string getMedShape() const {return shape;}
+        string getMedColor() const {return color;}
+
+        //mutators
+        void setMedForm(const string &f) {form = f;}
+        void setMedShape(const string &s) {shape = s;}
+        void setMedColor(const string &c) {color = c;}
 
         //functions
         void read()
@@ -154,11 +153,13 @@ class MedType {
         cout << "Enter form (tablet, capsule, powder, liquid): ";
         
         getline(cin, form);
+        setMedForm(form);
 
         if (form=="tablet" || form=="capsule")
         {
             cout << "Enter shape (round, oval): ";
             getline(cin, shape);
+            setMedShape(shape);
         }
         
         else if(form == "powder" || form == "liquid")
@@ -171,6 +172,7 @@ class MedType {
         cout << "Enter color: ";
         
         getline(cin, color);
+        setMedColor(color);
 
         }
 
@@ -188,7 +190,7 @@ class Medication {
     public:
     //constructor
     Medication(){}
-    Medication(string n, string d): medName(n), dosage(d) {}
+    //Medication(string n, string d): medName(n), dosage(d) {}
     Medication(string n, string d, string s, string c, string f): medName(n), dosage(d), medType(s,c,f){}
 
     //accessors
@@ -205,8 +207,9 @@ class Medication {
         medType.read();
         dFreq.setdailyIntake();
         wFreq.setdayPerWeek();
-        //frequency.printFreq(); //print frequency of medicine intake ehhh ni input je kan kenapa nak print
     }
+
+
     void output(int num){
         if(num==0){
             cout << "No medication available.\n" << endl;
@@ -249,78 +252,74 @@ class Patient {
         else if(sex=="M") return "Male";
         return "";} //M=Male, F=Female
 
-      virtual void getData() { //for first time
+     virtual void getData() { //for first time
         cout << "\t\t<< ENTER DETAILS >>" << endl
              << "\t\t<< TO REGISTER >>" << endl << endl;
         cout << "\t\tPatient ID: ";
         getline(cin, patientID);
+        setID(patientID);
         cout << "\t\tFull Name: ";
         getline(cin, fullname);
         cout << "\t\tPassword: ";
         getline(cin, password);
+        setpassword(password);
         cout << "\t\tDate of Birth (DD/MM/YYYY): ";
         getline(cin, dob);
         cout << "\t\tGender (M/F): ";
         getline(cin, sex);
+        for(int i = 0; i < sex.length(); i++)
+        sex = tolower(sex[i]);
     }
 
-    //method to calculate age
+    //method to calculate age (assume DD/MM/YYYY format)
     int getAge() {
-            int year;
-            
-                year = stoi(dob.substr(6, 4));
-           
-            return 2024 - year;
-            
+            int year, age;
+            try {
+                size_t pos1 = dob.find('/');
+                size_t pos2 = dob.find('/', pos1 + 1);
+                
+                year = stoi(dob.substr(pos2 + 1, 4)); 
 
-}
-            
+                age = 2024 - year;
+            } catch (const exception &e) {
+                cout << "Error extracting year from date of birth: " << e.what() << endl;
+            }
 
-    void login() {//untuk confirm
-        system("cls");
-        string pt, pw;
-        cout << "\n\t\t<<PLEASE ENTER AGAIN>>" << endl;
-        cout << "\t\t<<FOR LOGIN>>" << endl << endl;
-        cout << "\t\tPatient ID: ";
-        getline(cin, pt);
-        setID(pt);
-        cout << "\t\tPassword: ";
-        getline(cin, pw);
-        setpassword(pw);
-        system("cls");
-        if(pt != patientID && pw != password)
-        do{
-            cout << "\t\t!Both ID and password entered is wrong." << endl
-            << "\t\tEnter again!" << endl;
-            cout << "\t\tUser ID: ";
-            getline(cin, patientID);
-            cout << "\t\tPassword: ";
-            getline(cin, password);
-        }while(pt == patientID && pw == password);
-        else if(pw!=password) {
-             do{
-            cout << "\t\t!Password entered is wrong." << endl
-            << "\t\tEnter again!" << endl;
-            cout << "\t\tPassword: ";
-            getline(cin, password);
-            }while(pw==password);
+            return age;
         }
-        else if(pt!=patientID) {
-            do{
-            cout << "\t\t!User ID entered is wrong." << endl
-             << "\t\tEnter again!" << endl;
-            cout << "\t\tUser ID: ";
-            getline(cin, pt);
-            }while(pt==patientID);
-        }
+
+
+  void login() {
+    string pt, pw;
+
+    cout << "\n\t\t<< LOGIN >>" << endl << endl;
+
+    cout << "\t\tPatient ID: ";
+    getline(cin, pt);
+    cout << "\t\tPassword: ";
+    getline(cin, pw);
+
+    //login credentials
+    if (pt == getID() && pw == getpassword()) {
+        cout << "\t\tLOGIN SUCCESSFUL." << endl;
+    } else {
+        cout << "\t\t!Invalid ID or Password!" << endl;
+        cout << "\t\tEnter again." << endl;
+        login(); 
     }
+}
 
      virtual void printDetails() {
-        cout << "NAME : " << fullname << endl;
-        cout << "DATE OF BIRTH : " << dob << endl;
-        cout << "SEX : " << sex << endl << endl;
-        
+        cout << "---PATIENT DETAILS---" << endl;
+        cout << "NAME          : " << getname() << endl
+             << "DATE OF BIRTH : " << getdob() << endl
+             << "GENDER        : " << getsex() << endl 
+             << "AGE           : " << getAge() << endl << endl;
+
+         /*<< "Medicine name: " << med->getMedName() << endl
+         << "Medicine dosage: " << med->getMedDosage() << endl; */
     }
+
 
     //method to prescribe med (mutator)
     void setMed(Medication *m) {
@@ -403,15 +402,13 @@ class SpecialPatient: public Patient {
 
 class Report
 {
-    
-    string startDate;
-    string endDate;
+    string startDate, endDate;
     Medication *medication[20];  //Aggregation
     Patient *patient;            //Aggregation
     MedType *medtype[20];
+    Frequency *freq[20];
 
-
-    public:
+   public:
     Report() : startDate(""), endDate(""){}
     Report(string s, string e) : startDate(s), endDate(e) {}
 
@@ -474,18 +471,16 @@ class Report
     string getEdate(){return endDate;}
 
 
-    void displayReport(Patient *p)
+     void displayReport(Patient *p)
     { 
-        
-        cout << "\n\n" << setw(55) << 2024 << " MEDICATION REPORT SCHEDULE\n\n";
+
+        cout << "\n\n" << setw(35) << 2024 << " MEDICATION REPORT SCHEDULE\n\n";
 
         p->printDetails();
-        
-
     }
 
     // Display medication (Aggregation)
-    void displayMed(Medication *m, MedType *mt)
+    void displayMed(Medication *m, MedType *mt) const 
     {
         
         cout << "Date Start - Date End : " << startDate << " - " <<  endDate << "\n";
@@ -493,18 +488,17 @@ class Report
         cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
         cout << "Form" << setw(10) << ":  " << mt->getMedForm() << "\n";
         cout << "Shape" << setw(9) << ":  " << mt->getMedShape()<< "\n";
-        cout << "Color" << setw(9) << ":  " << mt->getMedColor() << "\n\n\n";
+        cout << "Color" << setw(9) << ":  " << mt->getMedColor() << "\n";
+        //cout << "Frequency" << setw(7) << ": " << *freq.printFreq() << "\n\n";
     }
 
     ~Report()
     {
-        cout << "YOUR REPORT HAS BEEN DELETED\n\n\n";
+        cout << "YOUR REPORT HAS BEEN DELETED\n";
+        cout << "THANK YOU FOR USING MEDICATION SCHEDULER :)";
     }
     
 };
-
-
-
 
 void displayLine() {
     cout << "\t\t";
@@ -532,20 +526,20 @@ int returnorexit() {
     int choose;
     cout << "\n\t\tPress [1] to return to menu, [2] to exit system [ ]\b\b";
     cin >> choose;
-    if(choose == 1)
-    userOption();
     return choose;
 }
 
 int main() {
-     int numMed=0;
+    
+    int numMed=0;
 
     Patient patient;
     RegularPatient rPatient;
     SpecialPatient sPatient;
     Medication *med = new Medication[50];
-    MedType *mt;
+    MedType *mt = new MedType[50];
     Report *report = new Report[50];
+    Frequency *freq = new Frequency[50];
 
     //TIME-FOR MEDICATION INTAKE 
     time_t now = time(nullptr);
@@ -557,31 +551,33 @@ int main() {
     // Print the current time
     cout << "\t\tLOGIN TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
 
-   
     patient.getData(); //get patient data
-    //patient.login(); //authenticate login process
+    patient.login(); //authenticate login process
 
-    if(patient.getAge() < 13 || patient.getAge() > 70) {
-        cout << "\tYOU NEED A GUARDIAN." << endl;
+    int age = patient.getAge();
+
+    if(age < 13 || age > 70) {
+        cout << "\n\t\tYOU NEED A GUARDIAN." << endl;
         sPatient.getData(); //for special patient
         system("cls");
-        sPatient.printDetails();
     }
-
     else{
         rPatient.getData();
         system("cls");
-        rPatient.printDetails();
         } //for regular patient
 
-    while(!false)
+    patient.printDetails();
+
+    bool exit = 0;
+
+    while(!exit)
     {
 
-    int optionUser = userOption(); //for user option
+    //int optionUser = userOption(); //for user option
 
-    switch(optionUser) 
+    switch(userOption()) 
     {
-        case 1: 
+         case 1: 
         {
             cout << "\nYou have chosen to ADD MEDICATION" << endl
                 << "How many medications do you want to add? [   ]\b\b\b";
@@ -589,23 +585,15 @@ int main() {
             system("cls");
 
             for(int i = 0; i < numMed; i++) {
-                
+
                 cout << "MEDICATION " << i+1 << " : \n\n";
                 med[i].input();
                 system("cls");
             }
-                
-            system("cls");
 
-            cout << "\n\t\tAll medications added successfully!\n\n\t";
-            med[1].output(numMed);
-            for(int i = 0; i < numMed; i++)
-            {
-            cout << i+1 << "\t";
-            med[i].outputMed();
-            cout << ""; 
-            }
-            returnorexit();
+            int c = returnorexit();
+            if(c==2)
+            exit = 1;
             break;
 
         }
@@ -613,11 +601,12 @@ int main() {
         case 2: 
         {
             if(numMed == 0)
-                cout << "\n\t\tYou have no record of medication to remove";
+                cout << "\n\t\t! ERROR !" << endl
+                << "\t\tYou have no record of medication to remove" << endl;
             else
             {
                 string mdname;
-                cout << "\t\tYou have chosen to REMOVE MEDICATION\n\n" << endl;
+                cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
@@ -634,7 +623,9 @@ int main() {
                     }
                 }
             }
-                returnorexit();
+                int c = returnorexit();
+                if(c==2)
+                exit = 1;
                 break;
         }
 
@@ -663,7 +654,7 @@ int main() {
                     system("cls");
                 }
 
-                report[1].displayReport(&patient); // Display report, display patient's information
+                report[0].displayReport(&patient); // Display report, display patient's information
 
                 for(int i = 0; i < numMed; i++)
                 {
@@ -671,19 +662,28 @@ int main() {
                     report[i].displayMed(&med[i], &mt[i]);
                 };
             }
-
-            break;
+                int c = returnorexit();
+                if(c==2)
+                exit = 1;
+                break;
         }
 
+
+        case 4: return 0; 
         default: 
         {
-            cout << "\t\tInvalid option!" << endl; 
+            cout << "\t\tInvalid option!" << endl
+                 << "\t\tChoose between [1] to [4]" << endl << endl;
             userOption();
+            int c = returnorexit();
+            if(c==2)
+            exit = 1;
         }
         break; 
     }
     }
 
+    delete[] med; //delete DMA 
     system("pause");
     return 0;
     
