@@ -1,9 +1,16 @@
 #include <iostream>
 #include <iomanip>
 #include <string>
+#include <ctime>
 
 using namespace std;
 
+class MyException: public exception { //create our own exception class that extended from the built in exception class
+    public:
+    const char* what() const throw() {
+        return "MyException error";
+    }
+};
 class Frequency
 {
     // so that child class have access
@@ -163,7 +170,9 @@ class MedType {
 class Medication {
     string medName, dosage;
     MedType medType;//composition
-    //Frequency frequency; //composition
+    Frequency frequency; //composition
+    dailyFreq dFreq;
+    weeklyFreq wFreq;
 
     public:
     //constructor
@@ -178,11 +187,14 @@ class Medication {
     //functions
     void input(){
         cout << "Enter medication name: ";
+        cin.ignore();
         getline(cin, medName); 
         cout << "Enter dosage(500mg, 5ml): ";
-        //cin.ignore();
         getline(cin, dosage);
         medType.read();
+        dFreq.setdailyIntake();
+        wFreq.setdayPerWeek();
+        frequency.printFreq(); //print frequency of medicine intake 
     }
     void output(int num){
         if(num==0){
@@ -203,7 +215,7 @@ class Medication {
 class Patient {
     protected:
     string patientID,  fullname, password, dob, sex;
-    Medication *med=NULL; //aggregation with Medication class
+    Medication *med = nullptr; //aggregation with Medication class
 
     public:
     Patient(string id=" ", string _name=" ", string pw=" ", string _dob=" ", string _sex=" "): 
@@ -222,15 +234,11 @@ class Patient {
     string getpassword() const{return password;}
     string getdob() const{return dob;}
     string getsex() const{
-        if(sex=="F") {
-            sex == "Female";
-        }
-        else if(sex=="M"){
-            sex == "Male";
-        }
-        return sex;} //M=Male, F=Female
+        if(sex=="F") return "Female";
+        else if(sex=="M") return "Male";
+        return "";} //M=Male, F=Female
 
-      void getData() { //for first time
+      virtual void getData() { //for first time
         cout << "\t\t<< ENTER DETAILS >>" << endl
              << "\t\t<< TO REGISTER >>" << endl << endl;
         cout << "\t\tPatient ID: ";
@@ -247,11 +255,10 @@ class Patient {
 
     //method to calculate age
     int getAge() {
-        int year, age;
-        year = stoi(dob.substr(6, 4));
-        age = 2024 - year;
-        return age;
-    }
+            int year = stoi(dob.substr(6, 4));
+            int age = 2024 - year;
+            return age;
+}
 
     void login() {//untuk confirm
         system("cls");
@@ -293,14 +300,14 @@ class Patient {
     }
 
      virtual void printDetails() {
-         cout << "Details of Patient 1" << endl
+         cout << "Details of Patient" << endl
          << "ID: " << getID() << endl
          << "Name: " << getname() << endl
          << "DOB: " << getdob() << endl
-         << "Age: " << getAge() << endl
+         //<< "Age: " << getAge() << endl
          << "Sex: " << getsex() << endl;
          /*<< "Medicine name: " << med->getMedName() << endl
-         << "Medicine dosage: " << med->getMedDosage() << endl;*/
+         << "Medicine dosage: " << med->getMedDosage() << endl; */
     }
 
     //method to prescribe med (mutator)
@@ -328,6 +335,13 @@ class RegularPatient : public Patient{
     string getemergencyContact() const{return emergencyContact;}
 
     //using polymorphism
+    void getData() {
+        cout << "\t\tContact info (+60): ";
+        getline(cin, contactInfo);
+        cout << "\t\tEmergency Contact (+60): ";
+        getline(cin, emergencyContact);
+    }
+
     void printDetails() override {
         Patient::printDetails();
         cout << "Contact Info (+60): " << getcontactInfo() << endl
@@ -354,6 +368,15 @@ class SpecialPatient: public Patient {
     string getguardianName() const{return guardianName;}
     string getrelationship() const{return relationship;}
     string getguardianContact() const{return guardianContact;}
+
+    void getData() {
+        cout << "\tGuardian name: ";
+        getline(cin, guardianName);
+        cout << "\tRelationship with patient: ";
+        getline(cin, relationship);
+        cout << "\tGuardian contact info (+60): ";
+        getline(cin, guardianContact);
+    }
 
     void printDetails() override {
         Patient::printDetails();
@@ -387,7 +410,6 @@ class Report
         string sD;
         cout << "When would you like to start your medication? \n";
         
-
         // Extract month from user
         do{
         cout << "(dd-mm-year) : ";
@@ -420,7 +442,6 @@ class Report
         string eD;
         cout << "When does this medication end? \n";
         
-
         do{
         cout << "(dd-mm-yyyy) : ";
         getline (cin, eD);
@@ -468,14 +489,8 @@ class Report
     string getEdate(){return endDate;}
 
 
-    ~Report()
-    {
-        cout << "YOUR REPORT HAS BEEN DELETED\n\n\n";
-    }
-
     void displayReport(Patient *p)
     { 
-
         string a = setYear();
         
         cout << "\n\n" << setw(55) << a << " MEDICATION REPORT SCHEDULE\n\n";
@@ -497,6 +512,11 @@ class Report
         cout << "Shape" << setw(9) << ":  " << mt->getMedShape()<< "\n";
         cout << "Color" << setw(9) << ":  " << mt->getMedColor() << "\n\n\n";
     }
+
+    ~Report()
+    {
+        cout << "YOUR REPORT HAS BEEN DELETED\n\n\n";
+    }
     
 };
 
@@ -510,7 +530,7 @@ void displayLine() {
 
 int userOption() {
     int useropt;
-     cout << "\t\tWelcome to MEDICATION SCHEDULER!" << endl
+     cout << "\n\t\tWelcome to MEDICATION SCHEDULER!" << endl
          << "\t\tChoose your task for today." << endl;
     cout << "\t\t[OPTION 1] => Add medication" << endl
          << "\t\t[OPTION 2] => Remove medication" << endl
@@ -518,7 +538,6 @@ int userOption() {
          << "\t\t[OPTION 4] => Exit system." << endl << endl;
     cout << "\t\tOPTION => ";
     cin >> useropt;
-    cin.ignore();
     return useropt;
 }
 
@@ -537,6 +556,8 @@ int main() {
     RegularPatient rPatient;
     SpecialPatient sPatient;
     Medication *med = new Medication[50];
+    MedType *mt;
+    Report report;
 
     //TIME-FOR MEDICATION INTAKE 
     time_t now = time(nullptr);
@@ -548,21 +569,24 @@ int main() {
     // Print the current time
     cout << "\t\tLOGIN TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
 
+   
     patient.getData(); //get patient data
-    patient.login(); //authenticate login process
+    //patient.login(); //authenticate login process
 
-
-    if(patient.getAge() < 13 || patient.getAge() > 70) 
-    sPatient.getData(); //for special patient
-    else
-    rPatient.getData(); //for regular patient
-
-    system("cls");
-    patient.printDetails();
-
-    int optionUser = userOption();
+    if(patient.getAge() < 13 || patient.getAge() > 70) {
+        cout << "\tYOU NEED A GUARDIAN." << endl;
+        sPatient.getData(); //for special patient
+        system("cls");
+        sPatient.printDetails();
+    }
+    else{
+        rPatient.getData();
+        system("cls");
+        rPatient.printDetails();
+        } //for regular patient
 
     while(!false){
+    int optionUser = userOption(); //for user option
     switch(optionUser) {
         case 1: {cout << "\n\t\t You've chosen ADD MEDICATION" << endl
                       << "\t\tHow many medications do you want to add? ";
@@ -599,12 +623,19 @@ int main() {
                 system("cls");
                 break;}
 
-        case 3: cout << "\t\tView report" << endl; 
-        break;
-        default: cout << "\t\tInvalid option!" << endl; break; 
+        case 3: {cout << "\t\tView report" << endl; 
+        report.setSdate();
+        report.setEdate();
+        report.displayReport(&patient);
+        report.displayMed(med, mt);
+        break;}
+        default: {cout << "\t\tInvalid option!" << endl; 
+        userOption();}
+        break; 
     }
     }
 
     system("pause");
     return 0;
 }
+
