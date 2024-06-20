@@ -70,13 +70,12 @@ class dailyFreq : public Frequency
         //AQCUIRE DAILY INTAKE FROM USER
         void setdailyIntake()
         {
+
+        // setting daily intake
             cout << "\nHow many times do you need to take the the medicine in a day?\n";
             cin >> dailyIntake;
-        }
-
-        //AQCUIRE TIME FROM USER
-        void setTime()
-        {
+        
+        // setting time for user
             for(int i = 0; i < dailyIntake; i++)
             {
             cout << "\nWhat's the time no." << i+1 << " you need to take the medication in a day? \n";
@@ -94,7 +93,7 @@ class dailyFreq : public Frequency
         void printFreq() override
         {
             cout << fixed << setprecision(2);
-            Frequency :: printFreq();
+            //Frequency :: printFreq();
             cout << "\nYou need to take " << dailyIntake << "per day.\n";
             cout << "Time: " ;
             for(int i = 0; i < dailyIntake; i++)
@@ -131,7 +130,7 @@ class weeklyFreq : public Frequency  //inheritance
         void printFreq() override
         {
             cout << "\nThis medicine needs to be taken " << dayPerWeek << " day(s) per week, and\n";
-            Frequency :: printFreq(); // print also the general frequency
+            //Frequency :: printFreq(); // print also the general frequency
         }
 };
 
@@ -194,7 +193,7 @@ class Medication {
         medType.read();
         dFreq.setdailyIntake();
         wFreq.setdayPerWeek();
-        frequency.printFreq(); //print frequency of medicine intake 
+        //frequency.printFreq(); //print frequency of medicine intake ehhh ni input je kan kenapa nak print
     }
     void output(int num){
         if(num==0){
@@ -205,7 +204,7 @@ class Medication {
         }
     }
     void outputMed(){
-        cout << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << endl;
+        cout << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << "\n\t";
     }
 
     //destructor
@@ -255,10 +254,15 @@ class Patient {
 
     //method to calculate age
     int getAge() {
-            int year = stoi(dob.substr(6, 4));
-            int age = 2024 - year;
-            return age;
+            int year;
+            
+                year = stoi(dob.substr(6, 4));
+           
+            return 2024 - year;
+            
+
 }
+            
 
     void login() {//untuk confirm
         system("cls");
@@ -300,14 +304,10 @@ class Patient {
     }
 
      virtual void printDetails() {
-         cout << "Details of Patient" << endl
-         << "ID: " << getID() << endl
-         << "Name: " << getname() << endl
-         << "DOB: " << getdob() << endl
-         //<< "Age: " << getAge() << endl
-         << "Sex: " << getsex() << endl;
-         /*<< "Medicine name: " << med->getMedName() << endl
-         << "Medicine dosage: " << med->getMedDosage() << endl; */
+        cout << "NAME : " << fullname << endl;
+        cout << "DATE OF BIRTH : " << dob << endl;
+        cout << "SEX : " << sex << endl << endl;
+        
     }
 
     //method to prescribe med (mutator)
@@ -408,11 +408,12 @@ class Report
     {
         int m,d;
         string sD;
-        cout << "When would you like to start your medication? \n";
+        cout << "When would you like to start your medication? ";
         
         // Extract month from user
         do{
         cout << "(dd-mm-year) : ";
+        cin.ignore();
         getline (cin, sD);
         startDate = sD;
         string a = startDate.substr(3,2);
@@ -430,20 +431,19 @@ class Report
 
     // Extract year from user
     string setYear()
-    {
-        string a;
-        a = startDate.substr(6,4);
-        return a;
+    { 
+        return startDate.substr(6,4);
     }
 
     void setEdate()
     {
         int n, e;
         string eD;
-        cout << "When does this medication end? \n";
+        cout << "When does this medication end? ";
         
         do{
         cout << "(dd-mm-yyyy) : ";
+        cin.ignore();
         getline (cin, eD);
         endDate = eD;
         string c = endDate.substr(3,2);
@@ -491,13 +491,13 @@ class Report
 
     void displayReport(Patient *p)
     { 
+        
         string a = setYear();
         
         cout << "\n\n" << setw(55) << a << " MEDICATION REPORT SCHEDULE\n\n";
 
-        cout << "NAME : " << p->getname() << endl;
-        cout << "DATE OF BIRTH : " << p->getdob() << endl;
-        cout << "SEX : " << p->getsex() << endl << endl << endl;
+        p->printDetails();
+        
 
     }
 
@@ -520,6 +520,9 @@ class Report
     
 };
 
+
+
+
 void displayLine() {
     cout << "\t\t";
     for(int i = 0; i < 30; i++) {
@@ -536,21 +539,23 @@ int userOption() {
          << "\t\t[OPTION 2] => Remove medication" << endl
          << "\t\t[OPTION 3] => See schedule for medicine intake" << endl
          << "\t\t[OPTION 4] => Exit system." << endl << endl;
-    cout << "\t\tOPTION => ";
+    cout << "\t\tOPTION => [ ]\b\b";
     cin >> useropt;
+    system("cls");
     return useropt;
 }
 
-void returnorexit() {
+int returnorexit() {
     int choose;
-    cout << "\n\t\tPress [1] to return to menu, [2] to exit system.";
+    cout << "\n\t\tPress [1] to return to menu, [2] to exit system [ ]\b\b";
     cin >> choose;
     if(choose == 1)
     userOption();
+    return choose;
 }
 
 int main() {
-     int numMed;
+     int numMed=0;
 
     Patient patient;
     RegularPatient rPatient;
@@ -588,26 +593,37 @@ int main() {
     while(!false){
     int optionUser = userOption(); //for user option
     switch(optionUser) {
-        case 1: {cout << "\n\t\t You've chosen ADD MEDICATION" << endl
-                      << "\t\tHow many medications do you want to add? ";
-                cin >> numMed;
-                system("cls");
+        case 1: 
+        {
+            cout << "\nYou have chosen ADD MEDICATION" << endl
+                << "How many medications do you want to add? [   ]\b\b\b";
+            cin >> numMed;
+            system("cls");
 
-                for(int i = 0; i < numMed; i++) {
-                    med[i].input();
-                }
-                cout << "\n\t\tAll medications added successfully!";
-                med->outputMed();
-                returnorexit();
-                system("cls");
-                break;}
+            for(int i = 0; i < numMed; i++) {
+                med[i].input();
+            }
+                
+            system("cls");
+
+            cout << "\n\t\tAll medications added successfully!\n\n\t";
+            med[1].output(numMed);
+            for(int i = 0; i < numMed; i++)
+            {
+            cout << i+1 << "\t";
+            med[i].outputMed();
+            }
+            returnorexit();
+            break;
+            }
 
         case 2: {if(numMed == 0)
                 cout << "\n\t\tYou have no record of medication to remove";
                 else{
-                cout << "\t\tPlease remove medication" << endl; 
-                cout << "\t\tEnter the medication name that you would like to delete from the list : " << endl;
                 string mdname;
+                // cout << "\t\tPlease remove medication" << endl; what dis for??
+                cout << "\t\tEnter the medication name that you would like to delete from the list : ";
+                cin.ignore();
                 getline(cin, mdname);
                 for(int i=0; i<numMed; i++){
                     if(mdname == med[i].getMedName()){
@@ -615,15 +631,14 @@ int main() {
                             med[j] = med[j+1];
                         }
                         numMed--;
-                        break;
+                        //break;
                     }
                 }
                 }
                 returnorexit();
-                system("cls");
                 break;}
 
-        case 3: {cout << "\t\tView report" << endl; 
+        case 3: {cout << "\t\tView report\n";
         report.setSdate();
         report.setEdate();
         report.displayReport(&patient);
@@ -637,5 +652,5 @@ int main() {
 
     system("pause");
     return 0;
+    
 }
-
