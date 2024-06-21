@@ -555,6 +555,33 @@ int returnorexit() {
     system("cls");
 }
 
+void case4(int numMed, Medication med[], Report report[], Patient &patient, MedType mt[]) {
+    cout << "You have chosen to VIEW REPORT\n\n";
+
+    if (numMed == 0) {
+        report[0].displayReport(&patient);
+        cout << "\n\n *You have no medication scheduled.\n**Press 1 to add medication.\n\n";
+    } else {
+        for (int i = 0; i < numMed; i++) {
+            cout << "DATES FOR MEDICATION " << i + 1 << " : " << med[i].getMedName() << "\n";
+            cout << "When would you like to start your medication " << i + 1 << " ? ";
+            report[i].setSdate();
+
+            cout << "When does this medication " << i + 1 << " end? ";
+            report[i].setEdate();
+
+            system("cls");
+        }
+
+        report[0].displayReport(&patient); // Display report, display patient's information
+        for (int i = 0; i < numMed; ++i) {
+            cout << "\nMEDICATION " << i + 1 << endl;
+            report[0].displayMed(&med[i], &mt[i]);
+        }
+    }
+    system("pause");
+}
+
 int main() {
 
     int numMed=0;
@@ -628,26 +655,27 @@ int main() {
 
             int c = returnorexit();
             if(c==2)
-            exit = 1;
+            case4(numMed, med, report, patient, mt);
             break;
 
         }
 
         case 2: 
         {
-            if(numMed == 0)
+            if(numMed == 0){
                 cout << "\n\t\t! ERROR !" << endl
                 << "\t\tYou have no record of medication to remove" << endl 
                 << "\t\tPress 1 to add medication" << endl << endl;
+            }
             else
             {
                 string mdname;
+                bool found = 0;
+                do{
                 cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
-
-                bool found = 0;
 
                 for(int i=0; i<numMed; i++)
                 {
@@ -662,18 +690,22 @@ int main() {
                         found = 1;
                         break;
                     }
+                    else{
+                        cout << "\n\t\tError! Medicine cannot be found.\n\n";
+                    }
                 }
+                }while(!found);
 
-                if(!found) cout << "\n\t\tError! Medicine cannot be found.\n\n";
             }
                 int c = returnorexit();
                 if(c==2)
-                exit = 1;
+                case4(numMed, med, report, patient, mt);
                 break;
         }
 
         case 3: 
-       {cout << "You have chosen DISPLAY LIST OF MEDICINES" << endl;
+       {system("cls");
+       cout << "You have chosen DISPLAY LIST OF MEDICINES" << endl;
         cout << "LIST OF MEDICINE(S) ADDED: " << endl;
         for(int k = 0; k < addMedNum; k++) {
             cout << k+1 << ". " << addMed[k] << endl << endl;
@@ -683,41 +715,13 @@ int main() {
         for(int j = 0; j < removeMedNum; j++) {
             cout << j+1 << ". " << removeMed[j] << endl << endl;
         }
+
+        int c = returnorexit();
+            if(c==2)
+            case4(numMed, med, report, patient, mt);
             break;}
 
-        case 4:{
-        cout << "You have chosen to VIEW REPORT\n\n";
-
-            if(numMed == 0)
-            {
-                report[0].displayReport(&patient);
-                cout << "\n\n *You have no medication scheduled.\n**Press 1 to add medication.\n\n";
-
-            }
-
-            else
-            {
-                for(int i = 0; i < numMed; i++)
-                {
-                    cout << "DATES FOR MEDICATION " << i+1 << " : " << med[i].getMedName() << "\n";
-                    cout << "When would you like to start your medication " << i+1 << " ? ";
-                    report[i].setSdate();
-
-                    cout << "When does this medication " << i+1 << " end? ";
-                    report[i].setEdate();
-
-                    system("cls");
-                }
-
-                report[0].displayReport(&patient); // Display report, display patient's information
-                for (int i = 0; i < numMed; ++i) 
-                {
-                    cout << "\nMEDICATION " << i+1 << endl;
-                    report[0].displayMed(&med[i], &mt[i]);
-                }
-            }
-            return 0;
-        }
+        case 4:{case4(numMed, med, report, patient, mt);}
 
         default: 
         {
@@ -737,6 +741,5 @@ int main() {
     delete[] mt;
     delete[] med;
     system("pause");
-    return 0;
-    
+    return 0; 
 }
