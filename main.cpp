@@ -282,7 +282,7 @@ class Patient {
         else if(sex=="m") return "Male";
         return "";} //M=Male, F=Female
 
-     virtual void getData() { //for first time
+    virtual void getData() { //for first time
         cout << "\t\t<< ENTER DETAILS >>" << endl
              << "\t\t<< TO REGISTER >>" << endl << endl;
         cout << "\t\tPatient ID: ";
@@ -304,16 +304,20 @@ class Patient {
 
     //method to calculate age (assume DD/MM/YYYY format)
     int getAge() const {
-            int year, age;
+            int year;
+            int age = 0;
             try {
-                size_t pos1 = dob.find('/');
-                size_t pos2 = dob.find('/', pos1 + 1);
+                if(dob.length() > 7) {
+                    size_t pos1 = dob.find('/');
+                    size_t pos2 = dob.find('/', pos1 + 1);
+                    year = stoi(dob.substr(pos2 + 1, 4)); 
+                    age = 2024 - year;
+                } else {
+                    throw(age);
+                }
 
-                year = stoi(dob.substr(pos2 + 1, 4)); 
-
-                age = 2024 - year;
             } catch (...) {
-                cout << "Error extracting date of birth." << endl;
+                cout << "Sorry, cannot extract your age from DOB." << endl;
             }
 
             return age;
@@ -348,7 +352,6 @@ class Patient {
              << "AGE           : " << getAge() << endl << endl;
     }
 
-
     //method to prescribe med (mutator)
     void setMed(Medication *m) {
         med = m;
@@ -377,16 +380,11 @@ class RegularPatient : public Patient{
 
     //using polymorphism
     void getData() {
-        cout << "\t\tContact info (+60): ";
+        Patient::getData();
+        cout << "\t\tContact Info (+60): ";
         getline(cin, contactInfo);
         cout << "\t\tEmergency Contact (+60): ";
         getline(cin, emergencyContact);
-    }
-
-    void printDetails() const override {
-        Patient::printDetails();
-        cout << "Contact Info (+60): " << getcontactInfo() << endl
-             << "Emergency Contact (+60): " << getemergencyContact() << endl;
     }
 
     ~RegularPatient() {} //destructor
@@ -413,19 +411,12 @@ class SpecialPatient: public Patient {
     string getguardianContact() const{return guardianContact;}
 
     void getData() {
-        cout << "\tGuardian name: ";
+        cout << "\t\tGuardian Name: ";
         getline(cin, guardianName);
-        cout << "\tRelationship with patient: ";
+        cout << "\t\tRelationship with Patient: ";
         getline(cin, relationship);
-        cout << "\tGuardian contact info (+60): ";
+        cout << "\t\tGuardian Contact Info (+60): ";
         getline(cin, guardianContact);
-    }
-
-    void printDetails() const override {
-        Patient::printDetails();
-        cout << "Guardian Name: " << getguardianName() << endl
-             << "Guardian Relationship with Patient: " << getrelationship() << endl
-             << "Guardian Contact (+60): " << getguardianContact() << endl;
     }
 
     ~SpecialPatient() {} //destructor
@@ -524,11 +515,7 @@ class Report
         m->freqOutput();
     }
 
-    ~Report()
-    {
-        cout << "YOUR REPORT HAS BEEN DELETED\n";
-        cout << "THANK YOU FOR USING MEDICATION SCHEDULER :)";
-    }
+    ~Report(){}
     
 };
 
@@ -548,7 +535,7 @@ int userOption() {
          << "\t\tChoose your task for today." << endl;
     cout << "\t\t[OPTION 1] => Add medication" << endl
          << "\t\t[OPTION 2] => Remove medication" << endl
-         << "\t\t[OPTION 3] => View list of medicine(s)" << endl
+         << "\t\t[OPTION 3] => View history" << endl
          << "\t\t[OPTION 4] => View report and exit system." << endl << endl;
     cout << "\t\tOPTION => [ ]\b\b";
     cin >> useropt;
@@ -564,13 +551,13 @@ int returnorexit() {
     system("cls");
 }
 
-void case4(int numMed, Medication med[], Report report[], Patient &patient, MedType mt[]) {
+void case4(int numMed, Medication med[], Report report[], Patient patient, MedType mt[]) {
     cout << "\t\tYou have chosen to VIEW REPORT and EXIT SYSTEM.\n\n";
     displayLine();
 
     if (numMed == 0) {
         report[0].displayReport(&patient);
-        cout << "\n\n *You have no medication scheduled.\n**Press 1 to add medication.\n\n";
+        cout << "\n\n *You have no medication scheduled.\n\n";
     } else {
         for (int i = 0; i < numMed; i++) {
             cout << "DATES FOR MEDICATION " << i + 1 << " : " << med[i].getMedName() << "\n";
@@ -595,12 +582,11 @@ void case4(int numMed, Medication med[], Report report[], Patient &patient, MedT
 
 int main() {
 
-    int numMed=0;
-    int addMedNum, removeMedNum;
+    int addMedNum, removeMedNum, numMed=0;
     string addMed[20]; //store name of meds added 
     string removeMed[20];  //store name of meds removed
 
-    Patient patient;
+    Patient* patient;
     RegularPatient rPatient;
     SpecialPatient sPatient;
     Medication *med = new Medication[50];
@@ -618,25 +604,23 @@ int main() {
     // Print the current time
     cout << "\t\tCURRENT TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
 
-    patient.getData(); //get patient data
+    rPatient.getData(); //get patient data
+    patient = &rPatient;
 
     system("cls");
 
-    patient.login(); //authenticate login process
+    patient->login(); //authenticate login process
 
-    int age = patient.getAge();
+    int age = patient->getAge();
 
     if(age < 13 || age > 70) {
         cout << "\n\t\tYOU NEED A GUARDIAN." << endl;
         sPatient.getData(); //for special patient
+        patient = &sPatient;
         system("cls");
     }
-    else{
-        rPatient.getData();
-        system("cls");
-        } //for regular patient
 
-    patient.printDetails();
+    patient->printDetails();
 
     bool exit = 0;
 
@@ -659,6 +643,7 @@ int main() {
                 {
                     cout << "\n\nMEDICATION " << i+1 << " : \n\n";
                     med[i].input();
+                    patient->setMed(med); //point to med
                     string medname = med[i].getMedName();
                     addMed[addMedNum++] = medname;
                     system("cls");
@@ -667,7 +652,7 @@ int main() {
 
             int c = returnorexit();
             if(c==2)
-            case4(numMed, med, report, patient, mt);
+            case4(numMed, med, report, *patient, mt);
             break;
 
         }
@@ -683,7 +668,7 @@ int main() {
             {
                 string mdname;
                 bool found = 0;
-                do{
+        
                 cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
                 displayLine();
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
@@ -694,49 +679,45 @@ int main() {
                 {
                     if(mdname == med[i].getMedName())
                     {
-                        for(int j=i; j<numMed-1; j++)
-                        {
-                        med[j] = med[j+1];
-                        removeMed[removeMedNum++] = mdname;
-                        }
+                        removeMed[removeMedNum++] = med[i].getMedName();
+                        patient->setMed(med);
                         numMed--;
-                        found = 1;
                         break;
                     }
                     else{
                         cout << "\n\t\tError! Medicine cannot be found.\n\n";
                     }
                 }
-                }while(!found);
+                
 
             }
                 int c = returnorexit();
                 if(c==2)
-                case4(numMed, med, report, patient, mt);
+                case4(numMed, med, report, *patient, mt);
                 break;
         }
 
         case 3: 
        {system("cls");
-        cout << "You have chosen DISPLAY LIST OF MEDICINES" << endl;
+        cout << "\t\tYou have chosen VIEW HISTORY" << endl;
         displayLine();
 
-        cout << "LIST OF MEDICINE(S) ADDED: " << endl;
+        cout << "\t\tLIST OF MEDICINE(S) ADDED: " << endl;
         for(int k = 0; k < addMedNum; k++) {
             cout << k+1 << ". " << addMed[k] << endl << endl;
         }
         
-        cout << "LIST OF MEDICINE(S) REMOVED: " << endl;
+        cout << "\t\tLIST OF MEDICINE(S) REMOVED: " << endl;
         for(int j = 0; j < removeMedNum; j++) {
             cout << j+1 << ". " << removeMed[j] << endl << endl;
         }
 
         int c = returnorexit();
             if(c==2)
-            case4(numMed, med, report, patient, mt);
+            case4(numMed, med, report, *patient, mt);
             break;}
 
-        case 4:{case4(numMed, med, report, patient, mt);}
+        case 4:{case4(numMed, med, report, *patient, mt);}
 
         default: 
         {
