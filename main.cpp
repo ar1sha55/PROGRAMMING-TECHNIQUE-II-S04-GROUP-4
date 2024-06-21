@@ -2,6 +2,7 @@
 #include <iomanip>
 #include <string>
 #include <ctime>
+#include <exception>
 
 using namespace std;
 
@@ -262,6 +263,7 @@ class Patient {
     Medication *med = nullptr; //aggregation with Medication class
 
     public:
+    class Wrong{};
     Patient(string id=" ", string _name=" ", string pw=" ", string _dob=" ", string _sex=" "): 
     patientID(id), fullname(_name), password(pw), dob(_dob), sex(_sex) {} //argument constructor
 
@@ -306,20 +308,19 @@ class Patient {
     int getAge() const {
             int year;
             int age = 0;
-            try {
+            string a = "UNDEFINED";
+            try{
                 if(dob.length() > 7) {
                     size_t pos1 = dob.find('/');
                     size_t pos2 = dob.find('/', pos1 + 1);
                     year = stoi(dob.substr(pos2 + 1, 4)); 
                     age = 2024 - year;
                 } else {
-                    throw(age);
+                    throw (age);
                 }
 
-            } catch (...) {
+            } catch(...) {
                 cout << "\n\t\tSorry, cannot extract your age from DOB." << endl;
-                cout << "\t\tPlease enter your age: ";
-                cin >> age;
             }
 
             return age;
