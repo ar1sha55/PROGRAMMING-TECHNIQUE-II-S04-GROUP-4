@@ -628,9 +628,9 @@ int main() {
     {
          case 1: 
         {
-            cout << "\nYou have chosen to ADD MEDICATION" << endl;
+            cout << "\n\t\tYou have chosen to ADD MEDICATION" << endl;
             displayLine();
-            cout << "How many medications do you want to add? [   ]\b\b\b";
+            cout << "\t\tHow many medications do you want to add? [   ]\b\b\b";
             cin >> numMed;
             system("cls");
 
@@ -643,8 +643,8 @@ int main() {
                     addMed[addMedNum++] = medname;
                     system("cls");
                 }
-
-
+            med->output();
+            med->outputMed();
             int c = returnorexit();
             if(c==2)
             case4(numMed, med, report, *patient, mt);
@@ -662,7 +662,6 @@ int main() {
             else
             {
                 string mdname;
-                bool found = 0;
         
                 cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
                 displayLine();
@@ -670,6 +669,7 @@ int main() {
                 cin.ignore();
                 getline(cin, mdname);
 
+                bool found = false;
                 for(int i=0; i<numMed; i++)
                 {
                     if(mdname == med[i].getMedName())
@@ -677,13 +677,12 @@ int main() {
                         removeMed[removeMedNum++] = med[i].getMedName();
                         patient->setMed(med);
                         numMed--;
+                        found = true;
                         break;
                     }
-                    else{
-                        cout << "\n\t\tError! Medicine cannot be found.\n\n";
-                    }
                 }
-                
+
+                if(!found) cout << "\n\t\tError! Medicine cannot be found.\n\n";
 
             }
                 int c = returnorexit();
