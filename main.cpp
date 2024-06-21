@@ -18,7 +18,7 @@ class Frequency
         // MUTATOR
         void setFreq()
         {
-            cout << "\nNumber of doses you need to take at one time : ";
+            cout << "\nNumber of DOSE(S) you need to take at one time : ";
             cin >> freqVal;
         }
 
@@ -68,14 +68,14 @@ class dailyFreq : public Frequency
         {
 
         // setting daily intake
-            cout << "\nHow many times do you need to take the the medicine in a day?\n";
+            cout << "\nHow many TIMES do you need to take the the medicine in a day? ";
             cin >> dailyIntake;
         
         // setting time for user
             for(int i = 0; i < dailyIntake; i++)
             {
-            cout << "\nWhat's the time no." << i+1 << " you need to take the medication in a day? \n";
-            cout << "24hrs system (hh.mm) : ";
+            cout << "\nWhat's the time #" << i+1 << " you need to take the medication in a day?\n";
+            cout << "24hrs system (HH:MM) : ";
             cin >> time[i];
             }
         }
@@ -116,7 +116,7 @@ class weeklyFreq : public Frequency  //inheritance
         //AQCUIRE DAYPERWEEK FROM USER
         void setdayPerWeek()
         {
-            cout << "\nHow many times do you need to take the medication per week?\n";
+            cout << "\nHow many times do you need to take the medication per week? ";
             cin >> dayPerWeek;
         }
 
@@ -317,7 +317,9 @@ class Patient {
                 }
 
             } catch (...) {
-                cout << "Sorry, cannot extract your age from DOB." << endl;
+                cout << "\n\t\tSorry, cannot extract your age from DOB." << endl;
+                cout << "\t\tPlease enter your age: ";
+                cin >> age;
             }
 
             return age;
@@ -444,7 +446,7 @@ class Report
         
         // Extract month from user
         do{
-        cout << "(DD/MM) : ";
+        cout << "(DD-MM) : ";
         cin.ignore();
         getline (cin, sD);
         startDate = sD;
@@ -468,7 +470,7 @@ class Report
         string eD;
         
         do{
-        cout << "(DD/MM) : ";
+        cout << "(DD-MM) : ";
         getline (cin, eD);
         endDate = eD;
         string c = endDate.substr(3,2);
@@ -643,8 +645,11 @@ int main() {
                     addMed[addMedNum++] = medname;
                     system("cls");
                 }
-            med->output();
-            med->outputMed();
+
+            med->output(numMed);
+            for(int j = 0; j < numMed; j++) {
+                med[j].outputMed();}
+
             int c = returnorexit();
             if(c==2)
             case4(numMed, med, report, *patient, mt);
@@ -707,6 +712,7 @@ int main() {
         }
 
         int c = returnorexit();
+        system("cls");
             if(c==2)
             case4(numMed, med, report, *patient, mt);
             break;}
