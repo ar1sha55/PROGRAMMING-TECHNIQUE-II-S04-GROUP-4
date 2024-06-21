@@ -37,6 +37,8 @@ class Frequency
 
 };
 
+//------------------------------
+
 class dailyFreq : public Frequency
 {
     
@@ -98,6 +100,8 @@ class dailyFreq : public Frequency
 
 };
 
+//----------------------------------------------------------
+
 class weeklyFreq : public Frequency  //inheritance
 {
     int dayPerWeek;
@@ -127,6 +131,8 @@ class weeklyFreq : public Frequency  //inheritance
             //Frequency :: printFreq(); // print also the general frequency
         }
 };
+
+//----------------------------------------------------
 
 class MedType {
     string form, shape, color;
@@ -185,6 +191,8 @@ class MedType {
         //destructor
         ~MedType(){}
 };
+
+//-----------------------------------------------
 
 class Medication {
     string medName, dosage;
@@ -246,6 +254,8 @@ class Medication {
     ~Medication(){}
 };
 
+//----------------------------------------------------
+
 class Patient {
     protected:
     string patientID,  fullname, password, dob, sex;
@@ -298,12 +308,12 @@ class Patient {
             try {
                 size_t pos1 = dob.find('/');
                 size_t pos2 = dob.find('/', pos1 + 1);
-                
+
                 year = stoi(dob.substr(pos2 + 1, 4)); 
 
                 age = 2024 - year;
-            } catch (const exception &e) {
-                cout << "Error extracting year from date of birth: " << e.what() << endl;
+            } catch (...) {
+                cout << "Error extracting date of birth." << endl;
             }
 
             return age;
@@ -347,6 +357,8 @@ class Patient {
     ~Patient() {} //destructor
 };
 
+//------------------------------------------------------
+
 class RegularPatient : public Patient{
     private:
     string contactInfo, emergencyContact;
@@ -379,6 +391,8 @@ class RegularPatient : public Patient{
 
     ~RegularPatient() {} //destructor
 };
+
+//-------------------------------------------------------
 
 class SpecialPatient: public Patient {
     private:
@@ -417,6 +431,7 @@ class SpecialPatient: public Patient {
     ~SpecialPatient() {} //destructor
 };
 
+//----------------------------------------------
 
 class Report
 {
@@ -517,13 +532,7 @@ class Report
     
 };
 
-void displayAllMedications(Report *report, Medication *med, MedType *mt, int numMed) {
-    for (int i = 0; i < numMed; ++i) {
-        cout << "Medication " << i + 1 << ":\n";
-        report[i].displayMed(&med[i], &mt[i]);
-        cout << endl;
-    }
-}
+//-------------------------------------------------------
 
 void displayLine() {
     cout << "\t\t";
@@ -556,7 +565,8 @@ int returnorexit() {
 }
 
 void case4(int numMed, Medication med[], Report report[], Patient &patient, MedType mt[]) {
-    cout << "You have chosen to VIEW REPORT\n\n";
+    cout << "\t\tYou have chosen to VIEW REPORT and EXIT SYSTEM.\n\n";
+    displayLine();
 
     if (numMed == 0) {
         report[0].displayReport(&patient);
@@ -579,6 +589,7 @@ void case4(int numMed, Medication med[], Report report[], Patient &patient, MedT
             report[0].displayMed(&med[i], &mt[i]);
         }
     }
+
     system("pause");
 }
 
@@ -638,8 +649,9 @@ int main() {
     {
          case 1: 
         {
-            cout << "\nYou have chosen to ADD MEDICATION" << endl
-                << "How many medications do you want to add? [   ]\b\b\b";
+            cout << "\nYou have chosen to ADD MEDICATION" << endl;
+            displayLine();
+            cout << "How many medications do you want to add? [   ]\b\b\b";
             cin >> numMed;
             system("cls");
 
@@ -673,6 +685,7 @@ int main() {
                 bool found = 0;
                 do{
                 cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
+                displayLine();
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
@@ -705,7 +718,9 @@ int main() {
 
         case 3: 
        {system("cls");
-       cout << "You have chosen DISPLAY LIST OF MEDICINES" << endl;
+        cout << "You have chosen DISPLAY LIST OF MEDICINES" << endl;
+        displayLine();
+
         cout << "LIST OF MEDICINE(S) ADDED: " << endl;
         for(int k = 0; k < addMedNum; k++) {
             cout << k+1 << ". " << addMed[k] << endl << endl;
@@ -727,7 +742,6 @@ int main() {
         {
             cout << "\t\tInvalid option!" << endl
                  << "\t\tChoose between [1] to [4]" << endl << endl;
-            userOption();
             int c = returnorexit();
             if(c==2)
             exit = 1;
