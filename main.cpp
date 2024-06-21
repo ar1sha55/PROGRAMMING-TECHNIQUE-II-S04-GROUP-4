@@ -476,13 +476,15 @@ class Report
         cout << "(DD/MM) : ";
         getline (cin, eD);
         endDate = eD;
-        string c = endDate.substr(3,2);
+        size_t pos1 = endDate.find('-');
+        size_t pos2 = endDate.find('-', pos1 + 1);
+        string c = endDate.substr(pos1-1);
         n = stoi(c);
 
-        string f = endDate.substr(0,2);
+        string f = endDate.substr(pos2+1);
         e = stoi(f);
         
-        if(n > 13 || e > 31 ) // notification pop up if month entered is invalid
+        if((n>12 && n<=0) || (e>31 && e<=0) ) // notification pop up if month entered is invalid
         cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
         } while(n > 13 || e > 31);
         endDate = eD;
