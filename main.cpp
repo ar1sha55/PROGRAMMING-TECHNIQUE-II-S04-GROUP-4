@@ -555,7 +555,7 @@ int returnorexit() {
     system("cls");
 }
 
-void case4(int numMed, Medication med[], Report report[], Patient patient, MedType mt[]) {
+int case4(int numMed, Medication med[], Report report[], Patient patient, MedType mt[]) {
     cout << "\t\tYou have chosen to VIEW REPORT and EXIT SYSTEM.\n\n";
     displayLine();
 
@@ -581,7 +581,9 @@ void case4(int numMed, Medication med[], Report report[], Patient patient, MedTy
         }
     }
 
+
     system("pause");
+    return 0;
 }
 
 int main() {
@@ -659,6 +661,7 @@ int main() {
                 cout << "\n";
             }
 
+        
             for (int i = 0; i < numMed; ++i) {
                 cout << "\nEnter the name of MEDICINE #" << i + 1 << ": ";
                 getline(cin, inpMed);
@@ -756,7 +759,13 @@ int main() {
             case4(numMed, med, report, *patient, mt);
             break;}
 
-        case 4:{case4(numMed, med, report, *patient, mt);}
+        case 4:
+        {
+            case4(numMed, med, report, *patient, mt);
+            system("pause");
+            return 0;
+        }
+
 
         default: 
         {
