@@ -323,8 +323,12 @@ class Patient {
     }
 
     //method to prescribe med (mutator)
-    void setMed(Medication *m) {
+    void addMedi(Medication *m) {
         med = m;
+    }
+
+    void removeMedi(Medication *m) {
+        med = nullptr;
     }
 
     void displayMed() const {
@@ -622,14 +626,15 @@ int main() {
                 bool found = false;
                 for (int j = 0; j < 5; j++) {
                     if (inpMed == medlist[j].getMedName()) {
-                        patient->setMed(&medlist[j]);
+                        patient->addMedi(&medlist[j]);
                         addMed[addMedNum++] = inpMed;
+                        cout << addMed[addMedNum];
                         found = true;
                         break;
                     }
                     else if(inpMed == addMed[j]) {
                         cout << "\t\tYou already have this in your list." << endl;
-                        patient->setMed(NULL);
+                        patient->removeMedi(&medlist[j]);
                     }
                 }
 
@@ -666,8 +671,8 @@ int main() {
                 displayLine();
                 cout << "\t\tHere are your lists of medicine(s): " << endl;
 
-                for(int i = 0; i < numMed; i++) {
-                    cout << "\t\t#" << i+1 << addMed[i] << endl;
+                for(int i = 0; i < numMed+1; i++) {
+                    cout << "\t\t#" << i+1 << " " << addMed[i] << endl;
                 }
 
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
@@ -679,6 +684,7 @@ int main() {
                 {
                     if(mdname == addMed[i])
                     {
+                        patient->removeMedi(&medlist[i]);
                         removeMed[removeMedNum++] = addMed[i];
                         numMed--;
                         found = true;
