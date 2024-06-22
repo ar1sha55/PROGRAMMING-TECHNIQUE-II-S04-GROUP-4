@@ -217,10 +217,9 @@ class Medication {
     {
         cout << "Enter medication name: ";
         cin.ignore();
-        getline(cin, medName); 
-        cout << "Enter dosage(500mg, 5ml): ";
-        getline(cin, dosage);
-        medType.read();
+    }
+
+    void freqInput() {
         frequency.setFreq();
         dFreq.setdailyIntake();
         wFreq.setdayPerWeek();
@@ -599,9 +598,11 @@ int main() {
     Report *report = new Report[50];
     Frequency *freq = new Frequency[50];
 
-    Medication medlist[] = {{"Antibiotics", "200mg", "Capsule", "Round", "White"},
-                            {"Antihistamine", "50ml", "Liquid", "-", "Red"},
-                            {"Aspirin", "100mg", "Tablet", "Oval", "Blue"}};
+    Medication medlist[5] = {{"Antibiotics", "200mg", "Capsule", "Round", "White"},
+                            {"Antihistamine", "50ml", "Liquid", "-", "Clear"},
+                            {"Aspirin", "100mg", "Tablet", "Oval", "Blue"},
+                            {"Painkiller", "30mg", "Capsule", "Oval", "White"},
+                            {"Cough Syrup", "50ml", "Liquid", "-", "Red"}};
 
     //TIME-FOR MEDICATION INTAKE 
     time_t now = time(nullptr);
@@ -640,41 +641,53 @@ int main() {
 
     switch(userOption()) 
     {
-         case 1: 
+        case 1: 
         {
+            string inpMed;
             cout << "\n\t\tYou have chosen to ADD MEDICATION" << endl;
             displayLine();
-            //patient->setMed()
             cout << "\t\tHow many medications do you want to add? [   ]\b\b\b";
             cin >> numMed;
+            cin.ignore(); // To ignore the newline character left in the buffer
             system("cls");
 
-            cout << "\t\tChoose Medication" << endl;
+            cout << "\t\tChoose Medication from the following list." << endl << endl;
 
-            for(int i = 0; i < 5; i++) {
+            for (int i = 0; i < 3; i++) {
+                cout << "\nMEDICINE #" << i + 1 << endl;
                 medlist[i].display();
                 cout << "\n";
             }
 
-                for (int i = 0; i < numMed; ++i) 
-                {
-                    cout << "\n\nMEDICATION " << i+1 << " : \n\n";
-                    med[i].input();
-                    patient->setMed(med); //point to med
-                    string medname = med[i].getMedName();
-                    addMed[addMedNum++] = medname;
-                    system("cls");
+            for (int i = 0; i < numMed; ++i) {
+                cout << "\nEnter the name of MEDICINE #" << i + 1 << ": ";
+                getline(cin, inpMed);
+
+                bool found = false;
+                for (int j = 0; j < 5; j++) {
+                    if (inpMed == medlist[j].getMedName()) {
+                        patient->setMed(&medlist[j]);
+                        addMed[addMedNum++] = inpMed;
+                        found = true;
+                        break;
+                    }
                 }
 
-            med->output(numMed);
-            for(int j = 0; j < numMed; j++) {
-                med[j].outputMed();}
+                if (!found) {
+                    cout << "\nMedication not found in the predefined list.\n";
+                }
+
+            }
+
+            cout << "You have added the following medications:" << endl;
+            for (int j = 0; j < addMedNum; j++) {
+                cout << j + 1 << ". " << addMed[j] << endl;
+            }
 
             int c = returnorexit();
-            if(c==2)
-            case4(numMed, med, report, *patient, mt);
+            if (c == 2)
+                case4(numMed, med, report, *patient, mt);
             break;
-
         }
 
         case 2: 
