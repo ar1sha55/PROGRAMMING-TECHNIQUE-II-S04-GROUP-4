@@ -638,6 +638,10 @@ int main() {
                         found = true;
                         break;
                     }
+                    else if(inpMed == addMed[j]) {
+                        cout << "\t\tYou already have this in your list." << endl;
+                        patient->setMed(NULL);
+                    }
                 }
 
                 if (!found) {
