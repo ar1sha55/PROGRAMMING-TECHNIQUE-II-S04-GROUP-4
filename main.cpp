@@ -720,7 +720,6 @@ int main() {
                     if(mdname == addMed[i])
                     {
                         removeMed[removeMedNum++] = addMed[i];
-                        patient->setMed(med);
                         numMed--;
                         found = true;
                         break;
