@@ -1,3 +1,4 @@
+
 #include <iostream>
 #include <iomanip>
 #include <string>
@@ -474,19 +475,6 @@ class Report
         p->printDetails();
     }
 
-    // Display medication (Aggregation)
-    void displayMed(Medication *m, MedType *mt) const 
-    {
-        
-        cout << "Date Start - Date End : " << startDate << " - " <<  endDate << "\n";
-        cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
-        cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
-
-        if (mt!=NULL) m->medtypeOutput();
-        
-        m->freqOutput();
-    }
-
     ~Report(){}
     
 };
@@ -545,6 +533,7 @@ void case4(int numMed, Medication med[], Report report[], Patient patient[], Med
         report[0].displayReport(patient); // Display report, display patient's information
         for(int i = 0; i < numMed; i++) {
             cout << "\nMEDICATION " << i+1 << endl;
+            cout << "Start Date - End Date: " << report[i].getSdate() << "-" << report[i].getEdate() << endl;
             patient[i].displayMed();
         }
     }
