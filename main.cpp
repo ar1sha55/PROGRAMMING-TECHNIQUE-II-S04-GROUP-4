@@ -550,7 +550,7 @@ int main() {
     string addMed[20]; //store name of meds added 
     string removeMed[20];  //store name of meds removed
 
-
+    //array of objects using DMA
     Patient* patient = new Patient[50];
     RegularPatient rPatient;
     SpecialPatient sPatient;
@@ -559,20 +559,22 @@ int main() {
     Report *report = new Report[50];
     Frequency *freq = new Frequency[50];
 
+    //predefined lists
     Medication medlist[5] = {{"Antibiotics", "200mg", "Capsule", "Round", "White"},
                             {"Antihistamine", "50ml", "Liquid", "-", "Clear"},
                             {"Aspirin", "100mg", "Tablet", "Oval", "Blue"},
                             {"Painkiller", "30mg", "Capsule", "Oval", "White"},
                             {"Cough Syrup", "50ml", "Liquid", "-", "Red"}};
 
-    //TIME-FOR MEDICATION INTAKE 
+    //current time 
     time_t now = time(nullptr);
 
     displayLine();
     cout << "\t\t|       HI!! WELCOME TO        |" << endl;
     cout << "\t\t| 2024 MEDICATION SCHEDULER :) |" << endl;
     displayLine();
-    // Print the current time
+
+    //print the current time
     cout << "\t\tCURRENT TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
 
     rPatient.getData(); //get patient data
@@ -600,6 +602,7 @@ int main() {
 
     switch(userOption()) 
     {
+        //1. ADD MEDICATION
         case 1: 
         {
             string inpMed;
@@ -656,6 +659,7 @@ int main() {
             break;
         }
 
+        //2. REMOVE MEDICATION
         case 2: 
         {
             if(numMed == 0){
@@ -701,6 +705,7 @@ int main() {
                 break;
         }
 
+        //3. VIEW HISTORY   
         case 3: 
        {system("cls");
         cout << "\t\tYou have chosen VIEW HISTORY" << endl;
@@ -722,6 +727,7 @@ int main() {
             case4(numMed, med, report, patient, mt);
             break;}
 
+        //4. VIEW REPORT    
         case 4:
         {
             case4(numMed, med, report, patient, mt);
@@ -729,7 +735,7 @@ int main() {
             return 0;
         }
 
-
+        //INVALID
         default: 
         {
             cout << "\t\tInvalid option!" << endl
@@ -746,6 +752,7 @@ int main() {
     delete[] report;
     delete[] mt;
     delete[] med;
+    delete[] patient;
     system("pause");
     return 0; 
 }
