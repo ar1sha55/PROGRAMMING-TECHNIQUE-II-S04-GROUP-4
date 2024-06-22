@@ -20,7 +20,7 @@ class Frequency
         // MUTATOR
         void setFreq()
         {
-            cout << "\nNumber of DOSE(S) you need to take at one time : ";
+            cout << "\n\t\tNumber of DOSE(S) you need to take at one time : ";
             cin >> freqVal;
         }
 
@@ -31,7 +31,7 @@ class Frequency
         // default print from parent class
         virtual void printFreq()
         {
-            cout << "Frequency : " << freqVal << " each time\n";
+            cout << "\t\tFrequency : " << freqVal << " each time\n";
         }
 
         // Destructor
@@ -70,14 +70,14 @@ class dailyFreq : public Frequency
         {
 
         // setting daily intake
-            cout << "\nHow many TIMES do you need to take the the medicine in a day? ";
+            cout << "\n\t\tHow many TIMES do you need to take the the medicine in a day? ";
             cin >> dailyIntake;
         
         // setting time for user
             for(int i = 0; i < dailyIntake; i++)
             {
-            cout << "\nWhat's the time #" << i+1 << " you need to take the medication in a day?\n";
-            cout << "24hrs system (HH:MM) : ";
+            cout << "\n\t\tWhat's the time #" << i+1 << " you need to take the medication in a day?\n";
+            cout << "\t\t24hrs system (HH.MM) : ";
             cin >> time[i];
             }
         }
@@ -91,11 +91,11 @@ class dailyFreq : public Frequency
         void printFreq() override
         {
             cout << fixed << setprecision(2);
-            cout << "\nYou need to take " << dailyIntake << " per day.\n";
-            cout << "Time: " ;
+            cout << "\n\t\tYou need to take " << dailyIntake << " per day.\n";
+            cout << "\t\tTime: " ;
             for(int i = 0; i < dailyIntake; i++)
             {
-                cout << time[i] << "\n" << setw(11) << endl;
+                cout << time[i] << "\t" << setw(11) << endl;
             }
             Frequency :: printFreq();
         }
@@ -118,7 +118,7 @@ class weeklyFreq : public Frequency  //inheritance
         //AQCUIRE DAYPERWEEK FROM USER
         void setdayPerWeek()
         {
-            cout << "\nHow many times do you need to take the medication per week? ";
+            cout << "\n\t\tHow many times do you need to take the medication per week? ";
             cin >> dayPerWeek;
         }
 
@@ -129,7 +129,7 @@ class weeklyFreq : public Frequency  //inheritance
         //PRINT WEEKLY FREQUENCY (POLYMORPHISM)
         void printFreq() override
         {
-            cout << "\nThis medicine needs to be taken " << dayPerWeek << " day(s) per week, and\n";
+            cout << "\n\t\tThis medicine needs to be taken " << dayPerWeek << " day(s) per week, and\n";
             //Frequency :: printFreq(); // print also the general frequency
         }
 };
@@ -157,9 +157,9 @@ class MedType {
 
         void printMedType()
         {
-            cout << "Form" << setw(10) << ":  " << form << "\n";
-            cout << "Shape" << setw(9) << ":  " << shape << "\n";
-            cout << "Color" << setw(9) << ":  " << color << "\n";        
+            cout << "\t\tForm" << setw(10) << ":  " << form << "\n";
+            cout << "\t\tShape" << setw(9) << ":  " << shape << "\n";
+            cout << "\t\tColor" << setw(9) << ":  " << color << "\n";        
         }
 
         //destructor
@@ -188,7 +188,7 @@ class Medication {
     //functions
     void input()
     {
-        cout << "Enter medication name: ";
+        cout << "\t\tEnter medication name: ";
         cin.ignore();
     }
 
@@ -211,16 +211,16 @@ class Medication {
     }
 
     void display() {
-        cout << "Medicine Name: " << medName << endl;
-        cout << "Medicine Dosage: " << dosage << endl;
+        cout << "\t\tMedicine Name: " << medName << endl;
+        cout << "\t\tMedicine Dosage: " << dosage << endl;
         medType.printMedType();
     }
 
     void outputMed(){
-        cout << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << "\n";
+        cout << "\t\t" << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << "\n";
     }
 
-    //destructor
+    //destructor 
     ~Medication(){}
 };
 
@@ -315,11 +315,11 @@ class Patient {
 }
 
      virtual void printDetails() const{
-        cout << "---PATIENT DETAILS---" << endl;
-        cout << "NAME          : " << getname() << endl
-             << "DATE OF BIRTH : " << getdob() << endl
-             << "GENDER        : " << getsex() << endl 
-             << "AGE           : " << getAge() << endl << endl;
+        cout << "\t\t---PATIENT DETAILS---" << endl;
+        cout << "\t\tNAME          : " << getname() << endl
+             << "\t\tDATE OF BIRTH : " << getdob() << endl
+             << "\t\tGENDER        : " << getsex() << endl 
+             << "\t\tAGE           : " << getAge() << endl << endl;
     }
 
     //method to prescribe med (mutator)
@@ -437,7 +437,7 @@ class Report
         d = stoi(b);
         
         if(m > 12 || d > 31 || m <= 0 || d <= 0) // notification pop up if month/day entered is invalid
-        cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
+        cout << "\t\tOops! It seems like there's a typo on your date.\n Enter again.";
         } while(m > 12 || d > 31 || m <= 0 || d <= 0);
         return m;
 
@@ -460,7 +460,7 @@ class Report
         e = stoi(f);
         
         if(n > 12 || e > 31 || n <= 0 || e <= 0 ) // notification pop up if month entered is invalid
-        cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
+        cout << "\t\tOops! It seems like there's a typo on your date.\n Enter again.";
         } while(n > 12 || e > 31 || n <= 0 || e <= 0);
         endDate = eD;
     }
@@ -474,7 +474,7 @@ class Report
      void displayReport(Patient *p)
     { 
 
-        cout << "\n\n" << setw(35) << 2024 << " MEDICATION REPORT SCHEDULE\n\n";
+        cout << "\n\n" << setw(35) << 2024 << "MEDICATION REPORT SCHEDULE\n\n";
 
         p->printDetails();
     }
@@ -521,14 +521,14 @@ void case4(int numMed, Medication med[], Report report[], Patient patient[], Med
 
     if (numMed == 0) {
         report[0].displayReport(patient);
-        cout << "\n\n *You have no medication scheduled.\n\n";
+        cout << "\n\n \t\t*You have no medication scheduled.\n\n";
     } else {
         for (int i = 0; i < numMed; i++) {
-            cout << "DATES FOR MEDICATION " << i + 1 << " : " << med[i].getMedName() << "\n";
-            cout << "When would you like to start your medication " << i + 1 << " ? ";
+            cout << "\t\tDATES FOR MEDICATION " << i + 1 << " : " << med[i].getMedName() << "\n";
+            cout << "\t\tWhen would you like to start your medication " << i + 1 << " ? ";
             report[i].setSdate();
 
-            cout << "When does this medication " << i + 1 << " end? ";
+            cout << "\t\tWhen does this medication " << i + 1 << " end? ";
             report[i].setEdate();
 
             system("cls");
@@ -536,8 +536,8 @@ void case4(int numMed, Medication med[], Report report[], Patient patient[], Med
 
         report[0].displayReport(patient); // Display report, display patient's information
         for(int i = 0; i < numMed; i++) {
-            cout << "\nMEDICATION " << i+1 << endl;
-            cout << "Start Date - End Date: " << report[i].getSdate() << "-" << report[i].getEdate() << endl;
+            cout << "\n\t\tMEDICATION " << i+1 << endl;
+            cout << "\t\tStart Date - End Date: " << report[i].getSdate() << "-" << report[i].getEdate() << endl;
             patient[i].displayMed();
             med[i].freqOutput();
         }
@@ -624,7 +624,7 @@ int main() {
 
         
             for (int i = 0; i < numMed; ++i) {
-                cout << "\nEnter the name of MEDICINE #" << i + 1 << ": ";
+                cout << "\n\t\tEnter the name of MEDICINE #" << i + 1 << ": ";
                 getline(cin, inpMed);
 
                 bool found = false;
@@ -633,6 +633,8 @@ int main() {
                         patient->addMedi(&medlist[j]);
                         addMed[addMedNum++] = inpMed;
                         cout << addMed[addMedNum];
+                        med->freqInput();
+                        cin.ignore();
                         found = true;
                         break;
                     }
@@ -643,16 +645,14 @@ int main() {
                 }
 
                 if (!found) {
-                    cout << "\nMedication not found in the predefined list.\n";
+                    cout << "\n\t\tMedication not found in the predefined list.\n";
                 }
-                med->freqInput();
-
             }
 
             system("cls");
-            cout << "You have added the following medications:" << endl;
+            cout << "\t\tYou have added the following medications:" << endl;
             for (int j = 0; j < addMedNum; j++) {
-                cout << j + 1 << ". " << addMed[j] << endl;
+                cout << "\t\t"<< j + 1 << ". " << addMed[j] << endl;
             }
 
             int c = returnorexit();
@@ -677,7 +677,7 @@ int main() {
                 displayLine();
                 cout << "\t\tHere are your lists of medicine(s): " << endl;
 
-                for(int i = 0; i < numMed+1; i++) {
+                for(int i = 0; i < numMed; i++) {
                     cout << "\t\t#" << i+1 << " " << addMed[i] << endl;
                 }
 
@@ -715,12 +715,12 @@ int main() {
 
         cout << "\t\tLIST OF MEDICINE(S) ADDED: " << endl;
         for(int k = 0; k < addMedNum; k++) {
-            cout << k+1 << ". " << addMed[k] << endl << endl;
+            cout <<"\t\t" << k+1 << ". " << addMed[k] << endl << endl;
         }
         
         cout << "\t\tLIST OF MEDICINE(S) REMOVED: " << endl;
         for(int j = 0; j < removeMedNum; j++) {
-            cout << j+1 << ". " << removeMed[j] << endl << endl;
+            cout <<"\t\t" << j+1 << ". " << removeMed[j] << endl << endl;
         }
 
         int c = returnorexit();
@@ -758,4 +758,3 @@ int main() {
     system("pause");
     return 0; 
 }
-
