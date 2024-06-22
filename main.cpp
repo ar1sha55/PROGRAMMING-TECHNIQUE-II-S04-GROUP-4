@@ -154,34 +154,6 @@ class MedType {
         void setMedShape(const string &s) {shape = s;}
         void setMedColor(const string &c) {color = c;}
 
-        //functions
-        void read()
-        {
-        cout << "Enter form (tablet, capsule, powder, liquid): ";
-        
-        getline(cin, form);
-        setMedForm(form);
-
-        if (form=="tablet" || form=="capsule")
-        {
-            cout << "Enter shape (round, oval): ";
-            getline(cin, shape);
-            setMedShape(shape);
-        }
-        
-        else if(form == "powder" || form == "liquid")
-        {
-            shape = "None";
-        }
-
-        else shape = "-";
-
-        cout << "Enter color: ";
-        
-        getline(cin, color);
-        setMedColor(color);
-        }
-
         void printMedType()
         {
             cout << "Form" << setw(10) << ":  " << form << "\n";
@@ -240,20 +212,9 @@ class Medication {
     void display() {
         cout << "Medicine Name: " << medName << endl;
         cout << "Medicine Dosage: " << dosage << endl;
-        cout << "Medicine Form: " << medType.getMedForm() << endl;
-        cout << "Medicine Shape: " << medType.getMedShape() << endl;
-        cout << "Medicine Color: " << medType.getMedColor() << endl;
+        medType.printMedType();
     }
 
-    void output(int num)
-    {
-        if(num==0){
-            cout << "No medication available.\n" << endl;
-        }else{
-            cout << left;
-            cout << setw(20) << "MEDICATION"<< setw(10) << "DOSAGE" << setw(10) << "FORM" << setw(10) << "SHAPE" << setw(10) << "COLOR" << endl;
-        }
-    }
     void outputMed(){
         cout << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << "\n";
     }
@@ -270,7 +231,6 @@ class Patient {
     Medication *med = nullptr; //aggregation with Medication class
 
     public:
-    class Wrong{};
     Patient(string id=" ", string _name=" ", string pw=" ", string _dob=" ", string _sex=" "): 
     patientID(id), fullname(_name), password(pw), dob(_dob), sex(_sex) {} //argument constructor
 
@@ -365,6 +325,14 @@ class Patient {
     void setMed(Medication *m) {
         med = m;
     }
+
+    string displayMed() const {
+            if(med!=NULL)
+            return med.display();
+            else
+            return " ";
+		}
+
 
     ~Patient() {} //destructor
 };
@@ -575,15 +543,10 @@ int case4(int numMed, Medication med[], Report report[], Patient patient, MedTyp
         }
 
         report[0].displayReport(&patient); // Display report, display patient's information
-        for (int i = 0; i < numMed; ++i) {
-            cout << "\nMEDICATION " << i + 1 << endl;
-            report[0].displayMed(&med[i], &mt[i]);
-        }
+            cout << "\nMEDICATION " << endl;
+            patient.displayMed();
     }
 
-
-    system("pause");
-    return 0;
 }
 
 int main() {
@@ -638,8 +601,6 @@ int main() {
 
     while(!exit)
     {
-
-    //int optionUser = userOption(); //for user option
 
     switch(userOption()) 
     {
@@ -786,3 +747,4 @@ int main() {
     system("pause");
     return 0; 
 }
+
