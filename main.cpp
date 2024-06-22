@@ -206,7 +206,7 @@ class Medication {
     //constructor
     Medication(){}
     //Medication(string n, string d): medName(n), dosage(d) {}
-    Medication(string n, string d, string s, string c, string f): medName(n), dosage(d), medType(s,c,f){}
+    Medication(string n, string d, string f, string s, string c): medName(n), dosage(d), medType(f, c, s){}
 
     //accessors
     string getMedName() {return medName;}
@@ -236,6 +236,14 @@ class Medication {
     void medtypeOutput()
     {
         medType.printMedType();
+    }
+
+    void display() {
+        cout << "Medicine Name: " << medName << endl;
+        cout << "Medicine Dosage: " << dosage << endl;
+        cout << "Medicine Form: " << medType.getMedForm() << endl;
+        cout << "Medicine Shape: " << medType.getMedShape() << endl;
+        cout << "Medicine Color: " << medType.getMedColor() << endl;
     }
 
     void output(int num)
@@ -308,7 +316,6 @@ class Patient {
     int getAge() const {
             int year;
             int age = 0;
-            string a = "UNDEFINED";
             try{
                 if(dob.length() > 7) {
                     size_t pos1 = dob.find('/');
@@ -592,6 +599,10 @@ int main() {
     Report *report = new Report[50];
     Frequency *freq = new Frequency[50];
 
+    Medication medlist[] = {{"Antibiotics", "200mg", "Capsule", "Round", "White"},
+                            {"Antihistamine", "50ml", "Liquid", "-", "Red"},
+                            {"Aspirin", "100mg", "Tablet", "Oval", "Blue"}};
+
     //TIME-FOR MEDICATION INTAKE 
     time_t now = time(nullptr);
 
@@ -633,9 +644,17 @@ int main() {
         {
             cout << "\n\t\tYou have chosen to ADD MEDICATION" << endl;
             displayLine();
+            //patient->setMed()
             cout << "\t\tHow many medications do you want to add? [   ]\b\b\b";
             cin >> numMed;
             system("cls");
+
+            cout << "\t\tChoose Medication" << endl;
+
+            for(int i = 0; i < 5; i++) {
+                medlist[i].display();
+                cout << "\n";
+            }
 
                 for (int i = 0; i < numMed; ++i) 
                 {
@@ -671,6 +690,10 @@ int main() {
         
                 cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
                 displayLine();
+                cout << "\t\tHere are your lists of medicine(s): " << endl;
+                for(int i = 0; i < numMed; i++) {
+                    cout << "\t\t#" << i+1 << med[i].getMedName() << endl;
+                }
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
