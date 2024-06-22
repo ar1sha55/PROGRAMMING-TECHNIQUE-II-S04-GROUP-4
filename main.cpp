@@ -326,11 +326,11 @@ class Patient {
         med = m;
     }
 
-    string displayMed() const {
+    void displayMed() const {
             if(med!=NULL)
             med->display();
             else
-            return " ";
+            cout << " ";
 		}
 
 
@@ -523,7 +523,7 @@ int returnorexit() {
     system("cls");
 }
 
-int case4(int numMed, Medication med[], Report report[], Patient patient[], MedType mt[]) {
+void case4(int numMed, Medication med[], Report report[], Patient patient[], MedType mt[]) {
     cout << "\t\tYou have chosen to VIEW REPORT and EXIT SYSTEM.\n\n";
     displayLine();
 
