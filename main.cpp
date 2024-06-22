@@ -653,7 +653,7 @@ int main() {
 
             cout << "\t\tChoose Medication from the following list." << endl << endl;
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 5; i++) {
                 cout << "\nMEDICINE #" << i + 1 << endl;
                 medlist[i].display();
                 cout << "\n";
@@ -679,6 +679,7 @@ int main() {
 
             }
 
+            system("cls");
             cout << "You have added the following medications:" << endl;
             for (int j = 0; j < addMedNum; j++) {
                 cout << j + 1 << ". " << addMed[j] << endl;
@@ -704,9 +705,11 @@ int main() {
                 cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
                 displayLine();
                 cout << "\t\tHere are your lists of medicine(s): " << endl;
+
                 for(int i = 0; i < numMed; i++) {
-                    cout << "\t\t#" << i+1 << med[i].getMedName() << endl;
+                    cout << "\t\t#" << i+1 << addMed[i] << endl;
                 }
+
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
@@ -714,9 +717,9 @@ int main() {
                 bool found = false;
                 for(int i=0; i<numMed; i++)
                 {
-                    if(mdname == med[i].getMedName())
+                    if(mdname == addMed[i])
                     {
-                        removeMed[removeMedNum++] = med[i].getMedName();
+                        removeMed[removeMedNum++] = addMed[i];
                         patient->setMed(med);
                         numMed--;
                         found = true;
