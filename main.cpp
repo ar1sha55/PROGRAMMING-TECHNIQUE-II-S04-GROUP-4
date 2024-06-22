@@ -633,8 +633,7 @@ int main() {
                         patient->addMedi(&medlist[j]);
                         addMed[addMedNum++] = inpMed;
                         cout << addMed[addMedNum];
-                        med->freqInput();
-                        cin.ignore();
+                        med[j].freqInput();
                         found = true;
                         break;
                     }
@@ -647,6 +646,7 @@ int main() {
                 if (!found) {
                     cout << "\n\t\tMedication not found in the predefined list.\n";
                 }
+                cin.ignore();
             }
 
             system("cls");
@@ -754,7 +754,6 @@ int main() {
     delete[] report;
     delete[] mt;
     delete[] med;
-    delete[] patient;
     system("pause");
     return 0; 
 }
