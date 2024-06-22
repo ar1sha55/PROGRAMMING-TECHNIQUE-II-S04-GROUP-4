@@ -328,7 +328,7 @@ class Patient {
 
     string displayMed() const {
             if(med!=NULL)
-            return med.display();
+            med->display();
             else
             return " ";
 		}
@@ -405,7 +405,7 @@ class Report
 {
     string startDate, endDate;
     Medication *medication[20]; 
-    Patient *patient;           
+    Patient *patient[20];          
     MedType *medtype[20];
     Frequency *freq[20];
 
@@ -523,12 +523,12 @@ int returnorexit() {
     system("cls");
 }
 
-int case4(int numMed, Medication med[], Report report[], Patient patient, MedType mt[]) {
+int case4(int numMed, Medication med[], Report report[], Patient patient[], MedType mt[]) {
     cout << "\t\tYou have chosen to VIEW REPORT and EXIT SYSTEM.\n\n";
     displayLine();
 
     if (numMed == 0) {
-        report[0].displayReport(&patient);
+        report[0].displayReport(patient);
         cout << "\n\n *You have no medication scheduled.\n\n";
     } else {
         for (int i = 0; i < numMed; i++) {
@@ -542,9 +542,11 @@ int case4(int numMed, Medication med[], Report report[], Patient patient, MedTyp
             system("cls");
         }
 
-        report[0].displayReport(&patient); // Display report, display patient's information
-            cout << "\nMEDICATION " << endl;
-            patient.displayMed();
+        report[0].displayReport(patient); // Display report, display patient's information
+        for(int i = 0; i < numMed; i++) {
+            cout << "\nMEDICATION " << i+1 << endl;
+            patient[i].displayMed();
+        }
     }
 
 }
@@ -555,7 +557,8 @@ int main() {
     string addMed[20]; //store name of meds added 
     string removeMed[20];  //store name of meds removed
 
-    Patient* patient;
+
+    Patient* patient = new Patient[50];
     RegularPatient rPatient;
     SpecialPatient sPatient;
     Medication *med = new Medication[50];
@@ -651,7 +654,7 @@ int main() {
 
             int c = returnorexit();
             if (c == 2)
-                case4(numMed, med, report, *patient, mt);
+                case4(numMed, med, report, patient, mt);
             break;
         }
 
@@ -695,7 +698,7 @@ int main() {
             }
                 int c = returnorexit();
                 if(c==2)
-                case4(numMed, med, report, *patient, mt);
+                case4(numMed, med, report, patient, mt);
                 break;
         }
 
@@ -717,12 +720,12 @@ int main() {
         int c = returnorexit();
         system("cls");
             if(c==2)
-            case4(numMed, med, report, *patient, mt);
+            case4(numMed, med, report, patient, mt);
             break;}
 
         case 4:
         {
-            case4(numMed, med, report, *patient, mt);
+            case4(numMed, med, report, patient, mt);
             system("pause");
             return 0;
         }
@@ -747,4 +750,3 @@ int main() {
     system("pause");
     return 0; 
 }
-
