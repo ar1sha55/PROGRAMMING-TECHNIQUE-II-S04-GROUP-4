@@ -539,6 +539,7 @@ void case4(int numMed, Medication med[], Report report[], Patient patient[], Med
             cout << "\nMEDICATION " << i+1 << endl;
             cout << "Start Date - End Date: " << report[i].getSdate() << "-" << report[i].getEdate() << endl;
             patient[i].displayMed();
+            med[i].freqOutput();
         }
     }
 
@@ -644,6 +645,7 @@ int main() {
                 if (!found) {
                     cout << "\nMedication not found in the predefined list.\n";
                 }
+                med->freqInput();
 
             }
 
@@ -756,3 +758,4 @@ int main() {
     system("pause");
     return 0; 
 }
+
