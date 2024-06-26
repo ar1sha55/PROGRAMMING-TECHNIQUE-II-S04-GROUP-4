@@ -236,8 +236,10 @@ class Medication {
         cout << "\n\n";
     }
 
-    void medtypeOutput()
+    void medOutput()
     {
+        cout << "\t\tName: " << medName << endl;
+        cout << "\t\tDosage: " << dosage << endl;
         medType.printMedType();
     }
 
@@ -481,12 +483,11 @@ class Report
     Report(double s, double e) : startDate(s), endDate(e) {}
 
     // MUTATORS
-    int setSdate()
+    void setSdate()
     {
         cout << "End Date and Time (YYMMDD.HHMM): ";
         cin >> startDate;
         cin.ignore();
-
     }
 
     void setEdate()
@@ -509,28 +510,18 @@ class Report
 
     // Display medication (Aggregation)
     void displayMedSchedule(Medication *m, MedType *mt, int medCount, double currentDateTime) {
-    cout << "\t\tBelow is your past medicine(s): \n";
     for (int i = 0; i < medCount; ++i) {
         if (startDate < currentDateTime) {
-            cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
-            cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
-
-            if (mt!=NULL) m->medtypeOutput();
-        
-            m->freqOutput();
+            cout << "\t\tPast Medicine(s): " << endl;
+            cout << "Start Date - End Date: " << startDate << " - " << endDate << endl;
+            m[i].medOutput();
+            m[i].freqOutput();
             cout << endl;
-        }
-    }
-
-    cout << "\n\t\tCurrent list of medicines:\n";
-    for (int i = 0; i < medCount; ++i) {
-        if (startDate >= currentDateTime) {
-            cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
-            cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
-
-            if (mt!=NULL) m->medtypeOutput();
-        
-            m->freqOutput();
+        } else if (startDate >= currentDateTime) {
+             cout << "\t\tCurrent Medicine(s): " << endl;
+            cout << "Start Date - End Date: " << startDate << " - " << endDate << endl;
+            m[i].medOutput();
+            m[i].freqOutput();
             cout << endl;
         }
     }
@@ -692,7 +683,6 @@ int main() {
                 cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
                 displayLine();
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
-                cin.ignore();
                 getline(cin, mdname);
 
                 bool found = false;
@@ -708,12 +698,9 @@ int main() {
                         }
                         numMed--;
                         break;
-                    }//else{found=false; cout<< "Medication not found" << endl;}
+                    }
                 }
-
-
                 if(!found) cout << "\n\t\tError! Medicine cannot be found.\n\n";
-
             }
                 int c = returnorexit();
                 if(c==2)
