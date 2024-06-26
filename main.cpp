@@ -369,11 +369,11 @@ class Patient {
 }
 
      virtual void printDetails() const{
-        cout << "---PATIENT DETAILS---" << endl;
-        cout << "NAME          : " << getname() << endl
-             << "DATE OF BIRTH : " << getdob() << endl
-             << "GENDER        : " << getsex() << endl 
-             << "AGE           : " << getAge() << endl << endl;
+        cout << "\t\t---PATIENT DETAILS---" << endl;
+        cout << "\t\tNAME          : " << getname() << endl
+             << "\t\tDATE OF BIRTH : " << getdob() << endl
+             << "\t\tGENDER        : " << getsex() << endl 
+             << "\t\tAGE           : " << getAge() << endl << endl;
     }
 
     //method to prescribe med (mutator)
@@ -700,13 +700,17 @@ int main() {
                 {
                     if(mdname == med[i].getMedName())
                     {
-                        removeMed[removeMedNum++] = med[i].getMedName();
-                        patient->setMed(med);
-                        numMed--;
                         found = true;
+                        removeMed[removeMedNum++] = med[i].getMedName();
+                        for(int j=i; j<numMed-1; j++){
+                            med[j] = med[j+1];
+                            patient->setMed(med);
+                        }
+                        numMed--;
                         break;
-                    }
+                    }//else{found=false; cout<< "Medication not found" << endl;}
                 }
+
 
                 if(!found) cout << "\n\t\tError! Medicine cannot be found.\n\n";
 
@@ -759,4 +763,3 @@ int main() {
     system("pause");
     return 0; 
 }
-
