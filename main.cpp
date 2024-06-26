@@ -1,9 +1,11 @@
-
 #include <iostream>
 #include <iomanip>
 #include <string>
 #include <ctime>
 #include <exception>
+#include <fstream>
+#include <vector>
+#include <conio.h>
 
 using namespace std;
 
@@ -20,7 +22,7 @@ class Frequency
         // MUTATOR
         void setFreq()
         {
-            cout << "\n\t\tNumber of DOSE(S) you need to take at one time : ";
+            cout << "\nNumber of DOSE(S) you need to take at one time : ";
             cin >> freqVal;
         }
 
@@ -31,7 +33,7 @@ class Frequency
         // default print from parent class
         virtual void printFreq()
         {
-            cout << "\t\tFrequency : " << freqVal << " each time\n";
+            cout << "Frequency : " << freqVal << " each time\n";
         }
 
         // Destructor
@@ -70,14 +72,14 @@ class dailyFreq : public Frequency
         {
 
         // setting daily intake
-            cout << "\n\t\tHow many TIMES do you need to take the the medicine in a day? ";
+            cout << "\nHow many TIMES do you need to take the the medicine in a day? ";
             cin >> dailyIntake;
         
         // setting time for user
             for(int i = 0; i < dailyIntake; i++)
             {
-            cout << "\n\t\tWhat's the time #" << i+1 << " you need to take the medication in a day?\n";
-            cout << "\t\t24hrs system (HH.MM) : ";
+            cout << "\nWhat's the time #" << i+1 << " you need to take the medication in a day?\n";
+            cout << "24hrs system (HH:MM) : ";
             cin >> time[i];
             }
         }
@@ -91,11 +93,11 @@ class dailyFreq : public Frequency
         void printFreq() override
         {
             cout << fixed << setprecision(2);
-            cout << "\n\t\tYou need to take " << dailyIntake << " per day.\n";
-            cout << "\t\tTime: " ;
+            cout << "\nYou need to take " << dailyIntake << " per day.\n";
+            cout << "Time: " ;
             for(int i = 0; i < dailyIntake; i++)
             {
-                cout << time[i] << "\t" << setw(11) << endl;
+                cout << time[i] << "\n" << setw(11) << endl;
             }
             Frequency :: printFreq();
         }
@@ -118,7 +120,7 @@ class weeklyFreq : public Frequency  //inheritance
         //AQCUIRE DAYPERWEEK FROM USER
         void setdayPerWeek()
         {
-            cout << "\n\t\tHow many times do you need to take the medication per week? ";
+            cout << "\nHow many times do you need to take the medication per week? ";
             cin >> dayPerWeek;
         }
 
@@ -129,7 +131,7 @@ class weeklyFreq : public Frequency  //inheritance
         //PRINT WEEKLY FREQUENCY (POLYMORPHISM)
         void printFreq() override
         {
-            cout << "\n\t\tThis medicine needs to be taken " << dayPerWeek << " day(s) per week, and\n";
+            cout << "\nThis medicine needs to be taken " << dayPerWeek << " day(s) per week, and\n";
             //Frequency :: printFreq(); // print also the general frequency
         }
 };
@@ -155,11 +157,39 @@ class MedType {
         void setMedShape(const string &s) {shape = s;}
         void setMedColor(const string &c) {color = c;}
 
+        //functions
+        void read()
+        {
+        cout << "Enter form (tablet, capsule, powder, liquid): ";
+        
+        getline(cin, form);
+        setMedForm(form);
+
+        if (form=="tablet" || form=="capsule")
+        {
+            cout << "Enter shape (round, oval): ";
+            getline(cin, shape);
+            setMedShape(shape);
+        }
+        
+        else if(form == "powder" || form == "liquid")
+        {
+            shape = "None";
+        }
+
+        else shape = "-";
+
+        cout << "Enter color: ";
+        
+        getline(cin, color);
+        setMedColor(color);
+        }
+
         void printMedType()
         {
-            cout << "\t\tForm" << setw(10) << ":  " << form << "\n";
-            cout << "\t\tShape" << setw(9) << ":  " << shape << "\n";
-            cout << "\t\tColor" << setw(9) << ":  " << color << "\n";        
+            cout << "Form" << setw(10) << ":  " << form << "\n";
+            cout << "Shape" << setw(9) << ":  " << shape << "\n";
+            cout << "Color" << setw(9) << ":  " << color << "\n";        
         }
 
         //destructor
@@ -179,7 +209,7 @@ class Medication {
     //constructor
     Medication(){}
     //Medication(string n, string d): medName(n), dosage(d) {}
-    Medication(string n, string d, string f, string s, string c): medName(n), dosage(d), medType(f, c, s){}
+    Medication(string n, string d, string s, string c, string f): medName(n), dosage(d), medType(s,c,f){}
 
     //accessors
     string getMedName() {return medName;}
@@ -188,11 +218,12 @@ class Medication {
     //functions
     void input()
     {
-        cout << "\t\tEnter medication name: ";
+        cout << "Enter medication name: ";
         cin.ignore();
-    }
-
-    void freqInput() {
+        getline(cin, medName); 
+        cout << "Enter dosage(500mg, 5ml): ";
+        getline(cin, dosage);
+        medType.read();
         frequency.setFreq();
         dFreq.setdailyIntake();
         wFreq.setdayPerWeek();
@@ -210,17 +241,30 @@ class Medication {
         medType.printMedType();
     }
 
-    void display() {
-        cout << "\t\tMedicine Name: " << medName << endl;
-        cout << "\t\tMedicine Dosage: " << dosage << endl;
-        medType.printMedType();
+    void output(int num)
+    {
+        if(num==0){
+            cout << "No medication available.\n" << endl;
+        }else{
+            cout << left;
+            cout << setw(20) << "MEDICATION"<< setw(10) << "DOSAGE" << setw(10) << "FORM" << setw(10) << "SHAPE" << setw(10) << "COLOR" << endl;
+        }
     }
-
     void outputMed(){
-        cout << "\t\t" << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << "\n";
+        cout << setw(20) << medName << setw(10) << dosage << setw(10) << medType.getMedForm() << setw(10)<< medType.getMedShape() << setw(10) << medType.getMedColor() << "\n";
     }
 
-    //destructor 
+    void addtoFile(string filename) {
+        ofstream outfile(filename, ios::app);
+        if (outfile.is_open()) {
+            outfile << medName << " " << dosage << " " << medType.getMedForm() << " " << medType.getMedColor() << " " << medType.getMedShape() << endl;
+            outfile.close();
+        } else {
+            cout << "Error opening file for writing patient data." << endl;
+        }
+    }
+
+    //destructor
     ~Medication(){}
 };
 
@@ -232,6 +276,7 @@ class Patient {
     Medication *med = nullptr; //aggregation with Medication class
 
     public:
+    class Wrong{};
     Patient(string id=" ", string _name=" ", string pw=" ", string _dob=" ", string _sex=" "): 
     patientID(id), fullname(_name), password(pw), dob(_dob), sex(_sex) {} //argument constructor
 
@@ -315,28 +360,39 @@ class Patient {
 }
 
      virtual void printDetails() const{
-        cout << "\t\t---PATIENT DETAILS---" << endl;
-        cout << "\t\tNAME          : " << getname() << endl
-             << "\t\tDATE OF BIRTH : " << getdob() << endl
-             << "\t\tGENDER        : " << getsex() << endl 
-             << "\t\tAGE           : " << getAge() << endl << endl;
+        cout << "---PATIENT DETAILS---" << endl;
+        cout << "NAME          : " << getname() << endl
+             << "DATE OF BIRTH : " << getdob() << endl
+             << "GENDER        : " << getsex() << endl 
+             << "AGE           : " << getAge() << endl << endl;
     }
 
     //method to prescribe med (mutator)
-    void addMedi(Medication *m) {
+    void setMed(Medication *m) {
         med = m;
     }
 
-    void removeMedi(Medication *m) {
-        med = nullptr;
-    }
+    void addPatientFile() {
+    ofstream outfile("patient_list.txt", ios::app);
+        if (outfile.is_open()) {
+            outfile << patientID << " " << fullname << " " << password << " " << dob << " " << sex << endl;
+            outfile.close();
+        } else {
+            cout << "Error opening file for writing patient data." << endl;
+        }
 
-    void displayMed() const {
-            if(med!=NULL)
-            med->display();
-            else
-            cout << " ";
-		}
+        //for each patient (Example: Arisha_med_history.txt)
+        string medFilename = fullname + "_med_history.txt";
+        ofstream medFile(medFilename);
+        if (medFile.is_open()) {
+                med->addtoFile(medFilename);
+        } else {
+            cout << "Error opening file for writing medications." << endl;
+        }
+
+        medFile.close();
+}
+
 
 
     ~Patient() {} //destructor
@@ -410,7 +466,7 @@ class Report
 {
     string startDate, endDate;
     Medication *medication[20]; 
-    Patient *patient[20];          
+    Patient *patient;           
     MedType *medtype[20];
     Frequency *freq[20];
 
@@ -437,7 +493,7 @@ class Report
         d = stoi(b);
         
         if(m > 12 || d > 31 || m <= 0 || d <= 0) // notification pop up if month/day entered is invalid
-        cout << "\t\tOops! It seems like there's a typo on your date.\n Enter again.";
+        cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
         } while(m > 12 || d > 31 || m <= 0 || d <= 0);
         return m;
 
@@ -460,7 +516,7 @@ class Report
         e = stoi(f);
         
         if(n > 12 || e > 31 || n <= 0 || e <= 0 ) // notification pop up if month entered is invalid
-        cout << "\t\tOops! It seems like there's a typo on your date.\n Enter again.";
+        cout << "Oops! It seems like there's a typo on your date.\n Enter again.";
         } while(n > 12 || e > 31 || n <= 0 || e <= 0);
         endDate = eD;
     }
@@ -474,9 +530,22 @@ class Report
      void displayReport(Patient *p)
     { 
 
-        cout << "\n\n" << setw(35) << 2024 << "MEDICATION REPORT SCHEDULE\n\n";
+        cout << "\n\n" << setw(35) << 2024 << " MEDICATION REPORT SCHEDULE\n\n";
 
         p->printDetails();
+    }
+
+    // Display medication (Aggregation)
+    void displayMed(Medication *m, MedType *mt) const 
+    {
+        
+        cout << "Date Start - Date End : " << startDate << " - " <<  endDate << "\n";
+        cout << "Name" << setw(10) << ":  " << m->getMedName() << "\n";
+        cout << "Dosage" << setw(8) << ":  " << m->getMedDosage() << "\n";
+
+        if (mt!=NULL) m->medtypeOutput();
+        
+        m->freqOutput();
     }
 
     ~Report(){}
@@ -515,35 +584,56 @@ int returnorexit() {
     system("cls");
 }
 
-void case4(int numMed, Medication med[], Report report[], Patient patient[], MedType mt[]) {
+void case4(int numMed, Medication med[], Report report[], Patient patient, MedType mt[]) {
     cout << "\t\tYou have chosen to VIEW REPORT and EXIT SYSTEM.\n\n";
     displayLine();
 
     if (numMed == 0) {
-        report[0].displayReport(patient);
-        cout << "\n\n \t\t*You have no medication scheduled.\n\n";
+        report[0].displayReport(&patient);
+        cout << "\n\n *You have no medication scheduled.\n\n";
     } else {
         for (int i = 0; i < numMed; i++) {
-            cout << "\t\tDATES FOR MEDICATION " << i + 1 << " : " << med[i].getMedName() << "\n";
-            cout << "\t\tWhen would you like to start your medication " << i + 1 << " ? ";
+            cout << "DATES FOR MEDICATION " << i + 1 << " : " << med[i].getMedName() << "\n";
+            cout << "When would you like to start your medication " << i + 1 << " ? ";
             report[i].setSdate();
 
-            cout << "\t\tWhen does this medication " << i + 1 << " end? ";
+            cout << "When does this medication " << i + 1 << " end? ";
             report[i].setEdate();
 
             system("cls");
         }
 
-        report[0].displayReport(patient); // Display report, display patient's information
-        for(int i = 0; i < numMed; i++) {
-            cout << "\n\t\tMEDICATION " << i+1 << endl;
-            cout << "\t\tStart Date - End Date: " << report[i].getSdate() << "-" << report[i].getEdate() << endl;
-            patient[i].displayMed();
-            med[i].freqOutput();
+        report[0].displayReport(&patient); // Display report, display patient's information
+        for (int i = 0; i < numMed; ++i) {
+            cout << "\nMEDICATION " << i + 1 << endl;
+            report[0].displayMed(&med[i], &mt[i]);
         }
     }
 
+    system("pause");
 }
+
+/*void addMedtoFile() {
+    ofstream outfile("patients.txt", ios::app);
+        if (outfile.is_open()) {
+            outfile << patientID << "," << fullname << "," << password << "," << dob << "," << sex << endl;
+            outfile.close();
+        } else {
+            cout << "Error opening file for writing patient data." << endl;
+        }
+
+        // Save medications
+        string medFilename = patientID + "_medications.txt";
+        ofstream medFile(medFilename);
+        if (medFile.is_open()) {
+            for (const auto &med : medications) {
+                med.saveToFile(medFilename);
+            }
+            medFile.close();
+        } else {
+            cout << "Error opening file for writing medications." << endl;
+        }
+}*/
 
 int main() {
 
@@ -551,8 +641,7 @@ int main() {
     string addMed[20]; //store name of meds added 
     string removeMed[20];  //store name of meds removed
 
-    //array of objects using DMA
-    Patient* patient = new Patient[50];
+    Patient* patient;
     RegularPatient rPatient;
     SpecialPatient sPatient;
     Medication *med = new Medication[50];
@@ -560,26 +649,20 @@ int main() {
     Report *report = new Report[50];
     Frequency *freq = new Frequency[50];
 
-    //predefined lists
-    Medication medlist[5] = {{"Antibiotics", "200mg", "Capsule", "Round", "White"},
-                            {"Antihistamine", "50ml", "Liquid", "-", "Clear"},
-                            {"Aspirin", "100mg", "Tablet", "Oval", "Blue"},
-                            {"Painkiller", "30mg", "Capsule", "Oval", "White"},
-                            {"Cough Syrup", "50ml", "Liquid", "-", "Red"}};
-
-    //current time 
+    //TIME-FOR MEDICATION INTAKE 
     time_t now = time(nullptr);
 
     displayLine();
     cout << "\t\t|       HI!! WELCOME TO        |" << endl;
     cout << "\t\t| 2024 MEDICATION SCHEDULER :) |" << endl;
     displayLine();
-
-    //print the current time
+    // Print the current time
     cout << "\t\tCURRENT TIME: " << put_time(localtime(&now), "%Y-%m-%d %H:%M:%S") << endl << endl;
 
     rPatient.getData(); //get patient data
     patient = &rPatient;
+    //string filename = patient->getname() + ".txt";
+    //patient->addPatientFile(filename);
 
     system("cls");
 
@@ -601,67 +684,40 @@ int main() {
     while(!exit)
     {
 
+    //int optionUser = userOption(); //for user option
+
     switch(userOption()) 
     {
-        //1. ADD MEDICATION
-        case 1: 
+         case 1: 
         {
-            string inpMed;
             cout << "\n\t\tYou have chosen to ADD MEDICATION" << endl;
             displayLine();
             cout << "\t\tHow many medications do you want to add? [   ]\b\b\b";
             cin >> numMed;
-            cin.ignore(); // To ignore the newline character left in the buffer
             system("cls");
 
-            cout << "\t\tChoose Medication from the following list." << endl << endl;
-
-            for (int i = 0; i < 5; i++) {
-                cout << "\nMEDICINE #" << i + 1 << endl;
-                medlist[i].display();
-                cout << "\n";
-            }
-
-        
-            for (int i = 0; i < numMed; ++i) {
-                cout << "\n\t\tEnter the name of MEDICINE #" << i + 1 << ": ";
-                getline(cin, inpMed);
-
-                bool found = false;
-                for (int j = 0; j < 5; j++) {
-                    if (inpMed == medlist[j].getMedName()) {
-                        patient->addMedi(&medlist[j]);
-                        addMed[addMedNum++] = inpMed;
-                        cout << addMed[addMedNum];
-                        med[j].freqInput();
-                        found = true;
-                        break;
-                    }
-                    else if(inpMed == addMed[j]) {
-                        cout << "\t\tYou already have this in your list." << endl;
-                        patient->removeMedi(&medlist[j]);
-                    }
+                for (int i = 0; i < numMed; ++i) 
+                {
+                    cout << "\n\nMEDICATION " << i+1 << " : \n\n";
+                    med[i].input();
+                    patient->setMed(med); //point to med
+                    string medname = med[i].getMedName();
+                    patient->addPatientFile();
+                    addMed[addMedNum++] = medname;
+                    system("cls");
                 }
 
-                if (!found) {
-                    cout << "\n\t\tMedication not found in the predefined list.\n";
-                }
-                cin.ignore();
-            }
-
-            system("cls");
-            cout << "\t\tYou have added the following medications:" << endl;
-            for (int j = 0; j < addMedNum; j++) {
-                cout << "\t\t"<< j + 1 << ". " << addMed[j] << endl;
-            }
+            med->output(numMed);
+            for(int j = 0; j < numMed; j++) {
+                med[j].outputMed();}
 
             int c = returnorexit();
-            if (c == 2)
-                case4(numMed, med, report, patient, mt);
+            if(c==2)
+            case4(numMed, med, report, *patient, mt);
             break;
+
         }
 
-        //2. REMOVE MEDICATION
         case 2: 
         {
             if(numMed == 0){
@@ -675,12 +731,6 @@ int main() {
         
                 cout << "\t\tYou have chosen REMOVE MEDICATION" << endl;
                 displayLine();
-                cout << "\t\tHere are your lists of medicine(s): " << endl;
-
-                for(int i = 0; i < numMed; i++) {
-                    cout << "\t\t#" << i+1 << " " << addMed[i] << endl;
-                }
-
                 cout << "\t\tEnter the medication name that you would like to delete from the list : ";
                 cin.ignore();
                 getline(cin, mdname);
@@ -688,10 +738,10 @@ int main() {
                 bool found = false;
                 for(int i=0; i<numMed; i++)
                 {
-                    if(mdname == addMed[i])
+                    if(mdname == med[i].getMedName())
                     {
-                        patient->removeMedi(&medlist[i]);
-                        removeMed[removeMedNum++] = addMed[i];
+                        removeMed[removeMedNum++] = med[i].getMedName();
+                        patient->setMed(med);
                         numMed--;
                         found = true;
                         break;
@@ -703,11 +753,10 @@ int main() {
             }
                 int c = returnorexit();
                 if(c==2)
-                case4(numMed, med, report, patient, mt);
+                case4(numMed, med, report, *patient, mt);
                 break;
         }
 
-        //3. VIEW HISTORY   
         case 3: 
        {system("cls");
         cout << "\t\tYou have chosen VIEW HISTORY" << endl;
@@ -715,29 +764,22 @@ int main() {
 
         cout << "\t\tLIST OF MEDICINE(S) ADDED: " << endl;
         for(int k = 0; k < addMedNum; k++) {
-            cout <<"\t\t" << k+1 << ". " << addMed[k] << endl << endl;
+            cout << k+1 << ". " << addMed[k] << endl << endl;
         }
         
         cout << "\t\tLIST OF MEDICINE(S) REMOVED: " << endl;
         for(int j = 0; j < removeMedNum; j++) {
-            cout <<"\t\t" << j+1 << ". " << removeMed[j] << endl << endl;
+            cout << j+1 << ". " << removeMed[j] << endl << endl;
         }
 
         int c = returnorexit();
         system("cls");
             if(c==2)
-            case4(numMed, med, report, patient, mt);
+            case4(numMed, med, report, *patient, mt);
             break;}
 
-        //4. VIEW REPORT    
-        case 4:
-        {
-            case4(numMed, med, report, patient, mt);
-            system("pause");
-            return 0;
-        }
+        case 4:{case4(numMed, med, report, *patient, mt);}
 
-        //INVALID
         default: 
         {
             cout << "\t\tInvalid option!" << endl
